@@ -1,47 +1,52 @@
-// ═══════════════════════════════════════
-//  NAVEGACIÓN SPA — Portafolio
-// ═══════════════════════════════════════
+// ===== PAGE ROUTER =====
+const pages = ['home','perfil','u1','u2','u3','u4'];
+const navIds = ['nav-home','nav-perfil','nav-u1','nav-u2','nav-u3','nav-u4'];
 
-const ALL_PAGES = ['inicio', 'tareas', 'perfil', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'];
-const NAV_PAGES = ['inicio', 'tareas', 'perfil'];
-
-function goTo(id) {
-  // Ocultar todas las páginas y glows
-  ALL_PAGES.forEach(p => {
-    const pg = document.getElementById('page-' + p);
-    const gl = document.getElementById('glow-' + p);
-    if (pg) {
-      pg.classList.remove('visible');
-      pg.style.display = 'none';
-    }
-    if (gl) gl.style.opacity = '0';
+function show(id){
+  pages.forEach(p=>{
+    document.getElementById('page-'+p).classList.toggle('active',p===id);
   });
-
-  // Limpiar estado activo del nav
-  NAV_PAGES.forEach(p => {
-    const btn = document.getElementById('nav-' + p);
-    if (btn) btn.classList.remove('active');
+  navIds.forEach((n,i)=>{
+    const el=document.getElementById(n);
+    if(el) el.classList.toggle('active-nav',pages[i]===id);
   });
-
-  // Activar botón del nav correspondiente
-  const navTarget = NAV_PAGES.includes(id) ? id : 'tareas';
-  const activeBtn = document.getElementById('nav-' + navTarget);
-  if (activeBtn) activeBtn.classList.add('active');
-
-  // Mostrar página destino
-  const target = document.getElementById('page-' + id);
-  const glow   = document.getElementById('glow-' + id);
-
-  if (target) {
-    target.style.display = '';
-    requestAnimationFrame(() => target.classList.add('visible'));
-  }
-
-  if (glow) glow.style.opacity = '1';
-
-  // Scroll al tope
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>initReveal(),100);
 }
 
-// Iniciar en la página de inicio
-goTo('inicio');
+// ===== LOGIN =====
+let isAdmin=false;
+function doLogin(){
+  const u=document.getElementById('inp-user').value.trim();
+  const p=document.getElementById('inp-pass').value.trim();
+  const err=document.getElementById('login-err');
+  if(u==='admin'&&p==='1234'){
+    isAdmin=true;
+    document.getElementById('modal').classList.remove('open');
+    document.getElementById('btnLogin').style.display='none';
+    document.getElementById('btnSalir').style.display='flex';
+    document.getElementById('adminBadge').classList.add('show');
+    err.style.display='none';
+  } else {
+    err.style.display='block';
+  }
+}
+function logout(){
+  isAdmin=false;
+  document.getElementById('btnLogin').style.display='';
+  document.getElementById('btnSalir').style.display='none';
+  document.getElementById('adminBadge').classList.remove('show');
+}
+document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+// ===== REVEAL ON SCROLL =====
+function initReveal(){
+  const els=document.querySelectorAll('.page.active .rv');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting) setTimeout(()=>e.target.classList.add('vis'),i*70);
+    });
+  },{threshold:0.1});
+  els.forEach(el=>{el.classList.remove('vis');obs.observe(el);});
+}
+initReveal();
