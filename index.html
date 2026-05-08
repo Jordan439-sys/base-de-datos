@@ -1,555 +1,509 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mi Portafolio — Jordan Vera Madueño</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" type="text/css" href="stylos.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio · Base de Datos II · UPLA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
-  <!-- ══════════════════════════════
-       AMBIENT GLOWS
-  ══════════════════════════════ -->
-  <div class="page-glow" id="glow-inicio"></div>
-  <div class="page-glow" id="glow-tareas" style="opacity:0"></div>
-  <div class="page-glow" id="glow-perfil" style="opacity:0"></div>
-  <div class="page-glow" id="glow-s1"     style="opacity:0"></div>
-  <div class="page-glow" id="glow-s2"     style="opacity:0"></div>
-  <div class="page-glow" id="glow-s3"     style="opacity:0"></div>
-  <div class="page-glow" id="glow-s4"     style="opacity:0"></div>
-  <div class="page-glow" id="glow-s5"     style="opacity:0"></div>
-  <div class="page-glow" id="glow-s6"     style="opacity:0"></div>
-  <div class="page-glow" id="glow-s7"     style="opacity:0"></div>
-  <div class="page-glow" id="glow-s8"     style="opacity:0"></div>
-
-  <!-- ══════════════════════════════
-       NAV
-  ══════════════════════════════ -->
-  <nav>
-    <div class="nav-brand" onclick="goTo('inicio')">
-      <div class="nav-avatar">J</div>
-      <span class="nav-name">Jordan Vera Madueño</span>
-    </div>
-    <div class="nav-links">
-      <button id="nav-inicio" onclick="goTo('inicio')" class="active">Inicio</button>
-      <button id="nav-tareas" onclick="goTo('tareas')">Tareas</button>
-      <button id="nav-perfil" onclick="goTo('perfil')">Perfil</button>
-    </div>
-  </nav>
-
-  <!-- ══════════════════════════════
-       INICIO
-  ══════════════════════════════ -->
-  <div class="page visible" id="page-inicio">
-    <div class="hero-logo-wrap">
-      <div class="hero-ring"></div>
-      <img
-        src="https://luis2003-sudo.github.io/DESARROLLO_APLICACIONES/upla.png"
-        alt="Logo UPLA"
-        onerror="this.style.display='none'"
-      />
-    </div>
-
-    <div class="badge b-lime">🎓 Portafolio académico</div>
-
-    <h1>
-      Mi <span class="w-orange">Portafolio</span><br/>
-      de <span class="w-amber">Trabajos</span>
-    </h1>
-
-    <p>
-      Bienvenido a mi espacio académico. Aquí encontrarás mis tareas,
-      proyectos y avances realizados durante el curso, organizados de
-      manera clara y profesional.
-    </p>
-
-    <div class="hero-cta">
-      <button class="btn-primary"          onclick="goTo('tareas')">📂 Ver tareas</button>
-      <button class="btn-outline btn-sky"  onclick="goTo('perfil')">👤 Mi perfil</button>
-    </div>
-
-    <div class="stripe" style="width:100%; max-width:700px; margin-bottom:3rem;"></div>
-
-    <div class="stats">
-      <div class="stat-card sc1"><div class="stat-num">8</div><div class="stat-label">Semanas</div></div>
-      <div class="stat-card sc2"><div class="stat-num">2</div><div class="stat-label">Unidades</div></div>
-      <div class="stat-card sc3"><div class="stat-num">1</div><div class="stat-label">Portafolio</div></div>
-    </div>
+<!-- ======== NAV ======== -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-box">UP</div>
+    <div class="nav-brand-text">UPLA<br>Portafolio · BD II</div>
   </div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="show('home');return false;" class="active-nav" id="nav-home">Inicio</a></li>
+    <li><a href="#" onclick="show('perfil');return false;" id="nav-perfil">Perfil</a></li>
+    <li><a href="#" onclick="show('u1');return false;" id="nav-u1">Unidad I</a></li>
+    <li><a href="#" onclick="show('u2');return false;" id="nav-u2">Unidad II</a></li>
+    <li><a href="#" onclick="show('u3');return false;" id="nav-u3">Unidad III</a></li>
+    <li><a href="#" onclick="show('u4');return false;" id="nav-u4">Unidad IV</a></li>
+  </ul>
+  <div class="admin-badge" id="adminBadge">⚡ Admin</div>
+  <button class="btn-login" id="btnLogin" onclick="document.getElementById('modal').classList.add('open')">⚡ Ingresar</button>
+  <button class="btn-salir" id="btnSalir" onclick="logout()">Salir</button>
+</nav>
 
-  <!-- ══════════════════════════════
-       TAREAS
-  ══════════════════════════════ -->
-  <div class="page" id="page-tareas">
-    <div class="page-header">
-      <div class="badge b-sky">📚 Actividades del curso</div>
-      <h1>Mis <span class="w-orange">Tareas</span></h1>
-      <p>Selecciona una semana para ver su contenido completo aquí mismo.</p>
-    </div>
-
-    <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--sky),var(--orange),var(--amber),var(--lime),transparent);"></div>
-
-    <!-- UNIDAD I -->
-    <div class="unit">
-      <div class="unit-header">
-        <div class="unit-tag ut1">Unidad I</div>
-        <div class="unit-info">
-          <h2 class="w-orange">Programación Orientada a Objetos</h2>
-          <span>Semanas 1 a 4</span>
-        </div>
-      </div>
-      <div class="udiv udiv1"></div>
-      <div class="weeks-grid">
-        <div class="week-card wc1" onclick="goTo('s1')">
-          <div class="week-num">01</div>
-          <div class="week-title">Semana 1</div>
-          <div class="week-sub">Apache Maven &amp; Git</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-        <div class="week-card wc1" onclick="goTo('s2')">
-          <div class="week-num">02</div>
-          <div class="week-title">Semana 2</div>
-          <div class="week-sub">Métodos</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-        <div class="week-card wc1" onclick="goTo('s3')">
-          <div class="week-num">03</div>
-          <div class="week-title">Semana 3</div>
-          <div class="week-sub">Prog. Orientada a Objetos</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-        <div class="week-card wc1" onclick="goTo('s4')">
-          <div class="week-num">04</div>
-          <div class="week-title">Semana 4</div>
-          <div class="week-sub">POO Consolidación</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- UNIDAD II -->
-    <div class="unit">
-      <div class="unit-header">
-        <div class="unit-tag ut2">Unidad II</div>
-        <div class="unit-info">
-          <h2 class="w-sky">Componentes de una Aplicación</h2>
-          <span>Semanas 5 a 8</span>
-        </div>
-      </div>
-      <div class="udiv udiv2"></div>
-      <div class="weeks-grid">
-        <div class="week-card wc2" onclick="goTo('s5')">
-          <div class="week-num">05</div>
-          <div class="week-title">Semana 5</div>
-          <div class="week-sub">Componentes de App</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-        <div class="week-card wc2" onclick="goTo('s6')">
-          <div class="week-num">06</div>
-          <div class="week-title">Semana 6</div>
-          <div class="week-sub">Componentes de App</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-        <div class="week-card wc2" onclick="goTo('s7')">
-          <div class="week-num">07</div>
-          <div class="week-title">Semana 7</div>
-          <div class="week-sub">Componentes de App</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-        <div class="week-card wc2" onclick="goTo('s8')">
-          <div class="week-num">08</div>
-          <div class="week-title">Semana 8</div>
-          <div class="week-sub">Cierre del bloque</div>
-          <div class="week-link">Ver semana →</div>
-        </div>
-      </div>
-    </div>
+<!-- ======== MODAL ======== -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-x" onclick="document.getElementById('modal').classList.remove('open')">×</button>
+    <h2>Acceso al Portal</h2>
+    <p>Solo para el administrador del portafolio</p>
+    <div class="fg"><label>Usuario</label><input type="text" id="inp-user" placeholder="admin"></div>
+    <div class="fg"><label>Contraseña</label><input type="password" id="inp-pass" placeholder="••••"></div>
+    <div id="login-err" style="font-size:12px;color:#ff4444;margin-bottom:8px;display:none;">Usuario o contraseña incorrectos.</div>
+    <button class="btn-sub" onclick="doLogin()">Iniciar Sesión</button>
+    <p class="hint">Demo: <strong>admin</strong> / <strong>1234</strong></p>
   </div>
+</div>
 
-  <!-- ══════════════════════════════
-       PERFIL
-  ══════════════════════════════ -->
-  <div class="page" id="page-perfil">
-    <div class="profile-avatar-wrap">
-      <div class="pr2"></div>
-      <div class="pr1"></div>
-      <div class="profile-avatar">J</div>
-    </div>
-
-    <h1>
-      Jordan <span class="w-orange"></span><br/>
-      <span class="w-amber">Vera</span> Madueño
-    </h1>
-
-    <div class="profile-role">Estudiante de Ingeniería — UPLA</div>
-
-    <p class="profile-bio">
-      Bienvenido a mi espacio personal. Soy estudiante de la Universidad
-      Peruana Los Andes y en este portafolio organizo y presento mis avances,
-      proyectos y tareas realizadas durante el ciclo académico.
-    </p>
-
-    <div class="stripe" style="height:2px; width:100%; margin-bottom:2.5rem; background:linear-gradient(90deg,transparent,var(--pink),var(--orange),var(--amber),transparent);"></div>
-
-    <div class="info-grid">
-      <div class="info-card ic1"><div class="info-label">Carrera</div><div class="info-value">Ingeniería</div></div>
-      <div class="info-card ic2"><div class="info-label">Ciclo</div><div class="info-value">V Ciclo</div></div>
-      <div class="info-card ic3"><div class="info-label">Universidad</div><div class="info-value">UPLA</div></div>
-      <div class="info-card ic4"><div class="info-label">Periodo</div><div class="info-value">2026 — I</div></div>
-    </div>
-
-    <div class="profile-cta">
-      <button class="btn-primary"           onclick="goTo('tareas')">📁 Ver Trabajos</button>
-      <a class="btn-outline btn-pink" href="https://github.com/Luis2003-sudo" target="_blank">🌸 GitHub</a>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════
-       SEMANA 1
-  ══════════════════════════════ -->
-  <div class="page" id="page-s1">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 1</span>
-      </div>
-      <div class="badge b-orange">📘 Semana 1 — Unidad I</div>
-      <h1>Apache <span class="w-orange">Maven</span><br/><span class="w-amber">&amp; Git</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana1" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--orange),var(--amber),var(--lime),transparent);"></div>
-      <div class="summary-card sc-orange">
-        <div class="card-label cl-orange">Resumen de la semana</div>
-        <p>En esta semana se desarrollaron actividades prácticas relacionadas con <strong>Apache Maven</strong> y se elaboró un trabajo informativo sobre el uso de <strong>Git y GitHub</strong> como herramientas fundamentales para el desarrollo de software.</p>
-      </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana1/ACTIVIDAD%20SAMANA%201.pdf" target="_blank">
-          <div class="link-icon li-orange">📄</div>
-          <div class="link-text"><strong>Ver Actividad</strong><span>Archivo PDF — Semana 1</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana1/Trabajo_Git_y_GitHub_Jose_Luis_Espinal_Huaman.pdf" target="_blank">
-          <div class="link-icon li-sky">🧩</div>
-          <div class="link-text"><strong>¿Qué es Git y GitHub?</strong><span>Trabajo informativo PDF</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-      </div>
-      <div class="semana-nav">
-        <button class="btn-primary"            onclick="goTo('tareas')">← Tareas</button>
-        <button class="btn-outline btn-amber"  onclick="goTo('s2')">Semana 2 →</button>
+<!-- ======== PAGE: HOME ======== -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow1"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><div class="badge-dot"></div>Ciclo Académico 2026 · UPLA</div>
+      <p class="hero-name">Michael Axel Vilcapoma Ochoa</p>
+      <h1>Portafolio<br><em>Base de Datos II</em></h1>
+      <p class="hero-sub">Plataforma académica · Ingeniería de Sistemas y Computación.<br>Explora el material de cada semana organizado por unidades.</p>
+      <div class="ctas">
+        <button class="btn-p" onclick="document.getElementById('sec-unidades').scrollIntoView({behavior:'smooth'})">Explorar Unidades →</button>
+        <button class="btn-s" onclick="show('perfil')">Ver Perfil</button>
       </div>
     </div>
-  </div>
+    <div class="stats-panel">
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Unidades</div></div>
+      <div class="stat"><div class="stat-n">16</div><div class="stat-l">Semanas</div></div>
+      <div class="stat"><div class="stat-n">V</div><div class="stat-l">Ciclo</div></div>
+      <div class="stat"><div class="stat-n">2026</div><div class="stat-l">Año</div></div>
+    </div>
+  </section>
 
-  <!-- ══════════════════════════════
-       SEMANA 2
-  ══════════════════════════════ -->
-  <div class="page" id="page-s2">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 2</span>
+  <section class="sec sec-alt" id="sec-unidades">
+    <div class="sec-header rv">
+      <div class="sec-tag" style="color:var(--p)">Contenido del Curso</div>
+      <h2 class="sec-title">Unidades del Curso</h2>
+      <p class="sec-desc">4 unidades · 4 semanas cada una · material descargable en PDF.</p>
+    </div>
+    <div class="units-grid">
+      <div class="ucard rv" onclick="show('u1')">
+        <div class="ucard-num">I</div>
+        <div class="ucard-badge">● 4 semanas</div>
+        <h3 class="ucard-title">Introducción a Bases de Datos</h3>
+        <p class="ucard-desc">Fundamentos, modelo relacional, SQL básico y DDL.</p>
+        <button class="ucard-link">Ver semanas →</button>
       </div>
-      <div class="badge b-amber">📗 Semana 2 — Unidad I</div>
-      <h1>Semana 2<br/><span class="w-amber">Métodos</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana2" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--amber),var(--sky),var(--lime),transparent);"></div>
-      <div class="summary-card sc-amber">
-        <div class="card-label cl-amber">Resumen de la semana</div>
-        <p>Esta semana se trabajó en la comprensión y aplicación de <strong>métodos en Java</strong>, abordando el uso de parámetros, valores de retorno y cómo organizar el código de manera modular y eficiente.</p>
-        <ul>
-          <li>Uso de métodos</li>
-          <li>Parámetros y retorno</li>
-          <li>Organización del código</li>
-        </ul>
+      <div class="ucard rv" onclick="show('u2')">
+        <div class="ucard-num">II</div>
+        <div class="ucard-badge">● 4 semanas</div>
+        <h3 class="ucard-title">Diseño y Normalización</h3>
+        <p class="ucard-desc">Modelado ER, formas normales e integridad referencial.</p>
+        <button class="ucard-link">Ver semanas →</button>
       </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana2/ACTIVIDAD%20SEMANA%202.pdf" target="_blank">
-          <div class="link-icon li-amber">📄</div>
-          <div class="link-text"><strong>Ver Actividad</strong><span>Archivo PDF — Semana 2</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana2" target="_blank">
-          <div class="link-icon li-sky">📊</div>
-          <div class="link-text"><strong>Datos GitHub</strong><span>Carpeta completa semana 2</span></div>
-          <div class="link-arrow">→</div>
-        </a>
+      <div class="ucard rv" onclick="show('u3')">
+        <div class="ucard-num">III</div>
+        <div class="ucard-badge">● 4 semanas</div>
+        <h3 class="ucard-title">SQL Avanzado</h3>
+        <p class="ucard-desc">Procedimientos, vistas, triggers y optimización.</p>
+        <button class="ucard-link">Ver semanas →</button>
       </div>
-      <div class="semana-nav">
-        <button class="btn-outline btn-amber" onclick="goTo('s1')">← Semana 1</button>
-        <button class="btn-primary"           onclick="goTo('tareas')">Tareas</button>
-        <button class="btn-outline btn-amber" onclick="goTo('s3')">Semana 3 →</button>
+      <div class="ucard rv" onclick="show('u4')">
+        <div class="ucard-num">IV</div>
+        <div class="ucard-badge">● 4 semanas</div>
+        <h3 class="ucard-title">Bases de Datos NoSQL</h3>
+        <p class="ucard-desc">MongoDB, Redis, comparativas y casos de uso reales.</p>
+        <button class="ucard-link">Ver semanas →</button>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- ══════════════════════════════
-       SEMANA 3
-  ══════════════════════════════ -->
-  <div class="page" id="page-s3">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 3</span>
-      </div>
-      <div class="badge b-lime">📙 Semana 3 — Unidad I</div>
-      <h1>Semana 3<br/><span class="w-lime">POO</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana3" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--lime),var(--orange),var(--amber),transparent);"></div>
-      <div class="summary-card sc-lime">
-        <div class="card-label cl-lime">Resumen de la semana</div>
-        <p>En esta semana se revisaron y aplicaron los <strong>fundamentos de la Programación Orientada a Objetos</strong>, trabajando en ejercicios prácticos del curso y analizando la estructura del código.</p>
-        <ul>
-          <li>Revisión de fundamentos de Programación Orientada a Objetos.</li>
-          <li>Aplicación práctica en ejercicios del curso.</li>
-          <li>Organización y análisis de la estructura del código.</li>
-        </ul>
-      </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana3/ACTIVIDAD%20SEMANA%203.pdf" target="_blank">
-          <div class="link-icon li-lime">📄</div>
-          <div class="link-text"><strong>Ver Actividad</strong><span>Archivo PDF — Semana 3</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana3" target="_blank">
-          <div class="link-icon li-sky">📊</div>
-          <div class="link-text"><strong>Datos GitHub</strong><span>Carpeta completa semana 3</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-      </div>
-      <div class="semana-nav">
-        <button class="btn-outline btn-amber" onclick="goTo('s2')">← Semana 2</button>
-        <button class="btn-primary"           onclick="goTo('tareas')">Tareas</button>
-        <button class="btn-outline btn-amber" onclick="goTo('s4')">Semana 4 →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════
-       SEMANA 4
-  ══════════════════════════════ -->
-  <div class="page" id="page-s4">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 4</span>
-      </div>
-      <div class="badge b-violet">📒 Semana 4 — Unidad I</div>
-      <h1>Semana 4<br/><span class="w-violet">POO Consolidación</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana4" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--violet),var(--orange),var(--amber),transparent);"></div>
-      <div class="summary-card sc-violet">
-        <div class="card-label cl-violet">Resumen de la semana</div>
-        <p>En esta semana se consolidaron los conceptos de <strong>Programación Orientada a Objetos</strong>, reforzando la estructura del código, la lógica de clases y la organización de soluciones.</p>
-        <ul>
-          <li>Consolidación de conceptos de POO.</li>
-          <li>Organización del código en clases.</li>
-          <li>Aplicación práctica de los contenidos.</li>
-        </ul>
-      </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana4" target="_blank">
-          <div class="link-icon li-violet">🌐</div>
-          <div class="link-text"><strong>Ver en GitHub</strong><span>Carpeta completa semana 4</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana4" target="_blank">
-          <div class="link-icon li-sky">📊</div>
-          <div class="link-text"><strong>Datos GitHub</strong><span>Archivos y evidencias</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-      </div>
-      <div class="semana-nav">
-        <button class="btn-outline btn-amber" onclick="goTo('s3')">← Semana 3</button>
-        <button class="btn-primary"          onclick="goTo('tareas')">Tareas</button>
-        <button class="btn-outline btn-sky"  onclick="goTo('s5')">Semana 5 →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════
-       SEMANA 5
-  ══════════════════════════════ -->
-  <div class="page" id="page-s5">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 5</span>
-      </div>
-      <div class="badge b-sky">📘 Semana 5 — Unidad II</div>
-      <h1>Semana 5<br/><span class="w-sky">Componentes</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana5" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--sky),var(--lime),var(--amber),transparent);"></div>
-      <div class="summary-card sc-sky">
-        <div class="card-label cl-sky">Resumen de la semana</div>
-        <p>Esta semana marcó el inicio del bloque sobre <strong>Componentes de una Aplicación</strong>, identificando los elementos esenciales que conforman una solución informática y su correcta organización.</p>
-        <ul>
-          <li>Introducción a componentes funcionales.</li>
-          <li>Estructura y organización de aplicaciones.</li>
-          <li>Desarrollo de actividad práctica documentada.</li>
-        </ul>
-      </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana5/ACTIVIDAD_SEMANA_5.pdf" target="_blank">
-          <div class="link-icon li-sky">📄</div>
-          <div class="link-text"><strong>Ver Actividad</strong><span>Archivo PDF — Semana 5</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana5" target="_blank">
-          <div class="link-icon li-lime">📊</div>
-          <div class="link-text"><strong>Datos GitHub</strong><span>Carpeta completa semana 5</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-      </div>
-      <div class="semana-nav">
-        <button class="btn-outline btn-amber" onclick="goTo('s4')">← Semana 4</button>
-        <button class="btn-primary"           onclick="goTo('tareas')">Tareas</button>
-        <button class="btn-outline btn-sky"   onclick="goTo('s6')">Semana 6 →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════
-       SEMANA 6
-  ══════════════════════════════ -->
-  <div class="page" id="page-s6">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 6</span>
-      </div>
-      <div class="badge b-pink">📗 Semana 6 — Unidad II</div>
-      <h1>Semana 6<br/><span class="w-pink">Componentes</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana6" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--pink),var(--sky),var(--lime),transparent);"></div>
-      <div class="summary-card sc-pink">
-        <div class="card-label cl-pink">Aprendizajes y evidencias</div>
-        <p>En esta semana se continuó con el <strong>análisis de los componentes de una aplicación</strong>, fortaleciendo la comprensión de cómo se relacionan las partes de un sistema y cómo se estructuran para su correcto funcionamiento.</p>
-        <ul>
-          <li>Continuidad del bloque temático de aplicaciones.</li>
-          <li>Relación entre componentes y funcionamiento general.</li>
-          <li>Desarrollo de evidencia práctica y documentación.</li>
-        </ul>
-      </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana6/ACTIVIDAD_SEMANA_6.pdf" target="_blank">
-          <div class="link-icon li-pink">📄</div>
-          <div class="link-text"><strong>Ver Actividad</strong><span>Archivo PDF — Semana 6</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana6" target="_blank">
-          <div class="link-icon li-sky">📊</div>
-          <div class="link-text"><strong>Datos GitHub</strong><span>Carpeta completa semana 6</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-      </div>
-      <div class="semana-nav">
-        <button class="btn-outline btn-sky" onclick="goTo('s5')">← Semana 5</button>
-        <button class="btn-primary"         onclick="goTo('tareas')">Tareas</button>
-        <button class="btn-outline btn-sky" onclick="goTo('s7')">Semana 7 →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════
-       SEMANA 7
-  ══════════════════════════════ -->
-  <div class="page" id="page-s7">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 7</span>
-      </div>
-      <div class="badge b-sky">📙 Semana 7 — Unidad II</div>
-      <h1>Semana 7<br/><span class="w-sky">Componentes</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana7" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--orange),var(--sky),var(--pink),transparent);"></div>
-      <div class="summary-card sc-sky">
-        <div class="card-label cl-sky">Aprendizajes y evidencias</div>
-        <p>En esta semana se continuó con el <strong>análisis de los componentes de una aplicación</strong>, fortaleciendo la comprensión de cómo se relacionan las partes de un sistema y cómo se estructuran para su correcto funcionamiento.</p>
-        <ul>
-          <li>Continuidad del bloque temático de aplicaciones.</li>
-          <li>Relación entre componentes y funcionamiento general.</li>
-          <li>Desarrollo de evidencia práctica y documentación.</li>
-        </ul>
-      </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana7/ACTIVIDAD_SEMANA_7.pdf" target="_blank">
-          <div class="link-icon li-sky">📄</div>
-          <div class="link-text"><strong>Ver Actividad</strong><span>Archivo PDF — Semana 7</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana7" target="_blank">
-          <div class="link-icon li-orange">📊</div>
-          <div class="link-text"><strong>Datos GitHub</strong><span>Carpeta completa semana 7</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-      </div>
-      <div class="semana-nav">
-        <button class="btn-outline btn-sky" onclick="goTo('s6')">← Semana 6</button>
-        <button class="btn-primary"         onclick="goTo('tareas')">Tareas</button>
-        <button class="btn-outline btn-sky" onclick="goTo('s8')">Semana 8 →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════
-       SEMANA 8
-  ══════════════════════════════ -->
-  <div class="page" id="page-s8">
-    <div class="semana-page">
-      <div class="breadcrumb">
-        <button onclick="goTo('tareas')">Tareas</button>
-        <span class="sep">›</span>
-        <span class="cur">Semana 8</span>
-      </div>
-      <div class="badge b-lime">🏁 Semana 8 — Unidad II</div>
-      <h1>Semana 8<br/><span class="w-lime">Cierre del Bloque</span></h1>
-      <a class="github-pill" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana8" target="_blank">🌐 Ver carpeta en GitHub →</a>
-      <div class="stripe" style="height:2px; margin-bottom:2.5rem; background:linear-gradient(90deg,var(--lime),var(--violet),var(--sky),transparent);"></div>
-      <div class="summary-card sc-lime">
-        <div class="card-label cl-lime">Aprendizajes y evidencias</div>
-        <p>Esta semana representa el <strong>cierre del bloque de Componentes de una Aplicación</strong>, integrando lo trabajado durante las semanas previas y organizando las evidencias finales del curso dentro del portafolio académico.</p>
-        <ul>
-          <li>Síntesis de contenidos de la unidad.</li>
-          <li>Organización final de actividades y recursos.</li>
-          <li>Cierre del bloque con evidencia documentada.</li>
-        </ul>
-      </div>
-      <div class="links-grid">
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/blob/main/tareas_semanales/semana8/ACTIVIDAD_SEMANA_8.pdf" target="_blank">
-          <div class="link-icon li-lime">📄</div>
-          <div class="link-text"><strong>Ver Actividad</strong><span>Archivo PDF — Semana 8</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-        <a class="link-card" href="https://github.com/Luis2003-sudo/DESARROLLO_APLICACIONES/tree/main/tareas_semanales/semana8" target="_blank">
-          <div class="link-icon li-violet">📊</div>
-          <div class="link-text"><strong>Datos GitHub</strong><span>Carpeta completa semana 8</span></div>
-          <div class="link-arrow">→</div>
-        </a>
-      </div>
-      <div class="semana-nav">
-        <button class="btn-outline btn-sky" onclick="goTo('s7')">← Semana 7</button>
-        <button class="btn-primary"         onclick="goTo('tareas')">← Volver a tareas</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════
-       FOOTER
-  ══════════════════════════════ -->
   <footer>
-    © 2025 — Universidad Peruana Los Andes
+    <div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div>
+    <div class="f-right">Base de Datos II · Ingeniería de Sistemas y Computación</div>
   </footer>
+</div>
 
-  <script src="portafolio.js"></script>
+<!-- ======== PAGE: PERFIL ======== -->
+<div class="page" id="page-perfil">
+  <div style="height:58px;"></div>
+  <section class="sec">
+    <div class="sec-header rv">
+      <div class="sec-tag" style="color:var(--c)">Sobre mí</div>
+      <h2 class="sec-title">Perfil del Estudiante</h2>
+    </div>
+    <div class="profile-wrap rv">
+      <div class="profile-side">
+        <div class="avatar"><span class="avatar-txt">MA</span></div>
+        <p class="p-name">Michael Axel Vilcapoma Ochoa</p>
+        <p class="p-deg">Ingeniería de Sistemas · UPLA</p>
+        <div class="ptags">
+          <div class="ptag"><div class="ptag-dot"></div>Ciclo V</div>
+          <div class="ptag"><div class="ptag-dot"></div>Sección B-1</div>
+          <div class="ptag"><div class="ptag-dot"></div>Base de Datos II</div>
+          <div class="ptag"><div class="ptag-dot"></div>Huancayo, Perú</div>
+          <div class="ptag"><div class="ptag-dot"></div>2026</div>
+        </div>
+      </div>
+      <div class="profile-main">
+        <h3>👨‍💻 Presentación</h3>
+        <p>Estudiante de Ingeniería de Sistemas y Computación en la Universidad Peruana Los Andes. Este portafolio recopila los trabajos académicos del curso Base de Datos II, demostrando dominio progresivo de conceptos como SQL, normalización, procedimientos almacenados y tecnologías NoSQL.</p>
+        <div class="docente"><span>Docente</span> Raul Fernandez Bejarano</div>
+        <br><br>
+        <h3>📚 Competencias del Curso</h3>
+        <p>A lo largo de las 16 semanas se desarrollan competencias en diseño de bases de datos relacionales, escritura de consultas SQL complejas, implementación de objetos de base de datos y comprensión de sistemas NoSQL modernos como herramientas complementarias al modelo relacional.</p>
+        <button class="btn-back" onclick="show('home')">← Volver al Inicio</button>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div>
+    <div class="f-right">Base de Datos II · Ingeniería de Sistemas y Computación</div>
+  </footer>
+</div>
+
+<!-- ======== PAGE: UNIDAD I ======== -->
+<div class="page" id="page-u1">
+  <div style="height:58px;"></div>
+  <div class="unit-hero u1">
+    <div class="unit-hero-grid"></div>
+    <div class="unit-num-bg">I</div>
+    <div style="position:relative;">
+      <div class="unit-tag">Unidad I · 4 Semanas</div>
+      <h1>Introducción a<br>Bases de Datos</h1>
+      <p class="unit-hero-desc">Fundamentos del modelo relacional, conceptos ACID, lenguaje SQL básico y sentencias DDL para creación y gestión de esquemas.</p>
+    </div>
+  </div>
+  <div class="unit-progress u1">
+    <span class="progress-label">Progreso</span>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
+    <span class="progress-pct">100%</span>
+  </div>
+  <div class="weeks-section u1">
+    <div class="weeks-grid">
+      <!-- Semana 1 -->
+      <div class="week-card rv">
+        <div class="week-num">Semana 01</div>
+        <h3 class="week-title">Fundamentos y Conceptos Básicos</h3>
+        <p class="week-desc">Introducción a los sistemas de gestión de bases de datos, historia y evolución. Diferencias entre SGBD y sistemas de archivos.</p>
+        <div class="week-items">
+          <div class="week-item">Concepto de base de datos y SGBD</div>
+          <div class="week-item">Ventajas de los SGBD sobre archivos</div>
+          <div class="week-item">Arquitectura de tres niveles ANSI/SPARC</div>
+          <div class="week-item">Usuarios y administrador de BD</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <!-- Semana 2 -->
+      <div class="week-card rv">
+        <div class="week-num">Semana 02</div>
+        <h3 class="week-title">Modelo Relacional</h3>
+        <p class="week-desc">Principios del modelo relacional propuesto por Codd. Conceptos de relación, tupla, atributo y dominio. Claves primarias y foráneas.</p>
+        <div class="week-items">
+          <div class="week-item">Estructura del modelo relacional</div>
+          <div class="week-item">Propiedades de las relaciones</div>
+          <div class="week-item">Claves candidatas, primarias y foráneas</div>
+          <div class="week-item">Restricciones de integridad</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <!-- Semana 3 -->
+      <div class="week-card rv">
+        <div class="week-num">Semana 03</div>
+        <h3 class="week-title">SQL Básico — DML</h3>
+        <p class="week-desc">Lenguaje de Manipulación de Datos. Consultas SELECT, filtros WHERE, ordenamiento ORDER BY y funciones de agregación básicas.</p>
+        <div class="week-items">
+          <div class="week-item">SELECT, FROM, WHERE</div>
+          <div class="week-item">Operadores lógicos y de comparación</div>
+          <div class="week-item">ORDER BY y DISTINCT</div>
+          <div class="week-item">COUNT, SUM, AVG, MIN, MAX</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <!-- Semana 4 -->
+      <div class="week-card rv">
+        <div class="week-num">Semana 04</div>
+        <h3 class="week-title">SQL DDL — Creación de Esquemas</h3>
+        <p class="week-desc">Lenguaje de Definición de Datos. Creación, modificación y eliminación de tablas, índices y restricciones a nivel de base de datos.</p>
+        <div class="week-items">
+          <div class="week-item">CREATE TABLE y tipos de datos</div>
+          <div class="week-item">ALTER TABLE — modificar estructura</div>
+          <div class="week-item">DROP TABLE y restricciones</div>
+          <div class="week-item">Creación de índices básicos</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unit-nav">
+    <button class="btn-back" onclick="show('home')">← Volver</button>
+    <button class="btn-s" onclick="show('u2')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">Unidad II →</button>
+  </div>
+  <footer><div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div><div class="f-right">Unidad I · BD II</div></footer>
+</div>
+
+<!-- ======== PAGE: UNIDAD II ======== -->
+<div class="page" id="page-u2">
+  <div style="height:58px;"></div>
+  <div class="unit-hero u2">
+    <div class="unit-hero-grid"></div>
+    <div class="unit-num-bg">II</div>
+    <div style="position:relative;">
+      <div class="unit-tag">Unidad II · 4 Semanas</div>
+      <h1>Diseño y<br>Normalización</h1>
+      <p class="unit-hero-desc">Modelado Entidad-Relación, conversión al modelo relacional, formas normales e integridad referencial avanzada.</p>
+    </div>
+  </div>
+  <div class="unit-progress u2">
+    <span class="progress-label">Progreso</span>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:75%"></div></div>
+    <span class="progress-pct">75%</span>
+  </div>
+  <div class="weeks-section u2">
+    <div class="weeks-grid">
+      <div class="week-card rv">
+        <div class="week-num">Semana 05</div>
+        <h3 class="week-title">Modelo Entidad-Relación</h3>
+        <p class="week-desc">Diagramas ER para representar entidades, atributos y relaciones del mundo real. Cardinalidades y participación.</p>
+        <div class="week-items">
+          <div class="week-item">Entidades fuertes y débiles</div>
+          <div class="week-item">Atributos simples, compuestos y derivados</div>
+          <div class="week-item">Relaciones y cardinalidad (1:1, 1:N, M:N)</div>
+          <div class="week-item">Participación total y parcial</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 06</div>
+        <h3 class="week-title">Conversión ER al Modelo Relacional</h3>
+        <p class="week-desc">Algoritmos para transformar diagramas ER en esquemas de tablas relacionales. Manejo de relaciones M:N y entidades débiles.</p>
+        <div class="week-items">
+          <div class="week-item">Reglas de conversión de entidades</div>
+          <div class="week-item">Tablas intermedias para M:N</div>
+          <div class="week-item">Herencia y especialización</div>
+          <div class="week-item">Diagramas UML vs Notación Chen</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 07</div>
+        <h3 class="week-title">Formas Normales 1FN, 2FN, 3FN</h3>
+        <p class="week-desc">Proceso de normalización para eliminar redundancias y anomalías de actualización. Primera, segunda y tercera forma normal.</p>
+        <div class="week-items">
+          <div class="week-item">Dependencias funcionales</div>
+          <div class="week-item">1FN: Atomicidad de atributos</div>
+          <div class="week-item">2FN: Dependencia plena de la clave</div>
+          <div class="week-item">3FN: Eliminación de dependencias transitivas</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 08</div>
+        <h3 class="week-title">BCNF e Integridad Referencial</h3>
+        <p class="week-desc">Forma normal de Boyce-Codd. Restricciones de integridad referencial, acciones ON DELETE y ON UPDATE.</p>
+        <div class="week-items">
+          <div class="week-item">Forma normal de Boyce-Codd (BCNF)</div>
+          <div class="week-item">Integridad referencial y FK</div>
+          <div class="week-item">ON DELETE CASCADE / SET NULL</div>
+          <div class="week-item">Desnormalización controlada</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-pending">En progreso</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unit-nav">
+    <button class="btn-back" onclick="show('u1')">← Unidad I</button>
+    <button class="btn-s" onclick="show('u3')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">Unidad III →</button>
+  </div>
+  <footer><div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div><div class="f-right">Unidad II · BD II</div></footer>
+</div>
+
+<!-- ======== PAGE: UNIDAD III ======== -->
+<div class="page" id="page-u3">
+  <div style="height:58px;"></div>
+  <div class="unit-hero u3">
+    <div class="unit-hero-grid"></div>
+    <div class="unit-num-bg">III</div>
+    <div style="position:relative;">
+      <div class="unit-tag">Unidad III · 4 Semanas</div>
+      <h1>SQL<br>Avanzado</h1>
+      <p class="unit-hero-desc">Procedimientos almacenados, vistas, funciones, triggers y técnicas de optimización de consultas para entornos de producción.</p>
+    </div>
+  </div>
+  <div class="unit-progress u3">
+    <span class="progress-label">Progreso</span>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:50%"></div></div>
+    <span class="progress-pct">50%</span>
+  </div>
+  <div class="weeks-section u3">
+    <div class="weeks-grid">
+      <div class="week-card rv">
+        <div class="week-num">Semana 09</div>
+        <h3 class="week-title">Consultas Avanzadas y JOINs</h3>
+        <p class="week-desc">Combinación de tablas con INNER, LEFT, RIGHT y FULL JOIN. Subconsultas correlacionadas y operadores EXISTS / IN / ANY.</p>
+        <div class="week-items">
+          <div class="week-item">INNER JOIN, LEFT JOIN, RIGHT JOIN</div>
+          <div class="week-item">FULL OUTER JOIN y CROSS JOIN</div>
+          <div class="week-item">Subconsultas en WHERE y FROM</div>
+          <div class="week-item">EXISTS, IN, ANY, ALL</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 10</div>
+        <h3 class="week-title">Vistas y Procedimientos Almacenados</h3>
+        <p class="week-desc">Creación y gestión de vistas para simplificar consultas. Procedimientos almacenados con parámetros de entrada y salida.</p>
+        <div class="week-items">
+          <div class="week-item">CREATE VIEW y WITH CHECK OPTION</div>
+          <div class="week-item">Vistas materializadas</div>
+          <div class="week-item">CREATE PROCEDURE con parámetros</div>
+          <div class="week-item">Control de flujo IF / WHILE / CASE</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 11</div>
+        <h3 class="week-title">Funciones y Triggers</h3>
+        <p class="week-desc">Funciones escalares y de tabla. Triggers de fila y de sentencia para auditoría e integridad de negocio automatizada.</p>
+        <div class="week-items">
+          <div class="week-item">Funciones escalares y de tabla</div>
+          <div class="week-item">Triggers BEFORE / AFTER INSERT/UPDATE/DELETE</div>
+          <div class="week-item">Tablas NEW y OLD en triggers</div>
+          <div class="week-item">Auditoría automática con triggers</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-pending">En progreso</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 12</div>
+        <h3 class="week-title">Optimización de Consultas</h3>
+        <p class="week-desc">Planes de ejecución, índices avanzados, particionamiento y técnicas de tuning para consultas de alto rendimiento.</p>
+        <div class="week-items">
+          <div class="week-item">EXPLAIN / ANALYZE y planes de ejecución</div>
+          <div class="week-item">Índices compuestos y covering indexes</div>
+          <div class="week-item">Particionamiento de tablas</div>
+          <div class="week-item">Query hints y estadísticas</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-pending">Pendiente</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unit-nav">
+    <button class="btn-back" onclick="show('u2')">← Unidad II</button>
+    <button class="btn-s" onclick="show('u4')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">Unidad IV →</button>
+  </div>
+  <footer><div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div><div class="f-right">Unidad III · BD II</div></footer>
+</div>
+
+<!-- ======== PAGE: UNIDAD IV ======== -->
+<div class="page" id="page-u4">
+  <div style="height:58px;"></div>
+  <div class="unit-hero u4">
+    <div class="unit-hero-grid"></div>
+    <div class="unit-num-bg">IV</div>
+    <div style="position:relative;">
+      <div class="unit-tag">Unidad IV · 4 Semanas</div>
+      <h1>Bases de Datos<br>NoSQL</h1>
+      <p class="unit-hero-desc">Sistemas de bases de datos no relacionales: MongoDB, Redis, Cassandra. Casos de uso reales y comparativas con el modelo relacional.</p>
+    </div>
+  </div>
+  <div class="unit-progress u4">
+    <span class="progress-label">Progreso</span>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:25%"></div></div>
+    <span class="progress-pct">25%</span>
+  </div>
+  <div class="weeks-section u4">
+    <div class="weeks-grid">
+      <div class="week-card rv">
+        <div class="week-num">Semana 13</div>
+        <h3 class="week-title">Introducción a NoSQL</h3>
+        <p class="week-desc">Origen del movimiento NoSQL, teorema CAP, tipos de bases de datos NoSQL y cuándo elegirlas sobre las relacionales.</p>
+        <div class="week-items">
+          <div class="week-item">Teorema CAP: Consistencia, Disponibilidad, Partición</div>
+          <div class="week-item">Tipos: documento, clave-valor, columnar, grafo</div>
+          <div class="week-item">ACID vs BASE</div>
+          <div class="week-item">Casos de uso por tipo de BD</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-done">Completado</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 14</div>
+        <h3 class="week-title">MongoDB — Base de Datos Documental</h3>
+        <p class="week-desc">Modelo de documentos JSON/BSON. Operaciones CRUD, consultas con filtros, agregaciones y índices en MongoDB.</p>
+        <div class="week-items">
+          <div class="week-item">Colecciones y documentos BSON</div>
+          <div class="week-item">insertOne, find, updateMany, deleteOne</div>
+          <div class="week-item">Pipeline de Aggregation</div>
+          <div class="week-item">Índices y explain() en MongoDB</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-pending">En progreso</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 15</div>
+        <h3 class="week-title">Redis — Clave-Valor en Memoria</h3>
+        <p class="week-desc">Estructuras de datos de Redis: strings, hashes, listas, sets y sorted sets. Caché, pub/sub y expiración de claves.</p>
+        <div class="week-items">
+          <div class="week-item">SET, GET, HSET, LPUSH, SADD</div>
+          <div class="week-item">TTL y expiración automática de claves</div>
+          <div class="week-item">Redis como caché de base de datos</div>
+          <div class="week-item">Pub/Sub y streams</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-pending">Pendiente</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+      <div class="week-card rv">
+        <div class="week-num">Semana 16</div>
+        <h3 class="week-title">Comparativas y Proyecto Final</h3>
+        <p class="week-desc">Análisis comparativo SQL vs NoSQL. Criterios de selección de tecnología. Presentación del proyecto integrador del curso.</p>
+        <div class="week-items">
+          <div class="week-item">Tabla comparativa SQL vs MongoDB vs Redis</div>
+          <div class="week-item">Arquitecturas híbridas (Polyglot Persistence)</div>
+          <div class="week-item">Exposición del proyecto final</div>
+          <div class="week-item">Evaluación integradora</div>
+        </div>
+        <div class="week-footer">
+          <span class="week-status status-pending">Pendiente</span>
+          <button class="btn-pdf">↓ PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unit-nav">
+    <button class="btn-back" onclick="show('u3')">← Unidad III</button>
+    <button class="btn-s" onclick="show('home')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">↑ Inicio</button>
+  </div>
+  <footer><div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div><div class="f-right">Unidad IV · BD II</div></footer>
+</div>
+
+<script src="scripts.js"></script>
 </body>
 </html>
