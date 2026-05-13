@@ -1,787 +1,465 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portafolio · Base de Datos II · UPLA</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --g: #00ff88;
-  --p: #ff0099;
-  --c: #00e5ff;
-  --y: #ffea00;
-  --o: #ff6600;
-  --bg: #060810;
-  --bg2: #0c0f1a;
-  --bg3: #111520;
-  --border: #1e2540;
-  --tx: #ddeeff;
-  --txm: #6a7fa0;
-  --u1: #00ff88;
-  --u2: #ff0099;
-  --u3: #00e5ff;
-  --u4: #ffea00;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,136,.012) 3px,rgba(0,255,136,.012) 4px);pointer-events:none;z-index:9999;}
-
-/* ===== PAGE SYSTEM ===== */
-.page{display:none;min-height:100vh;}
-.page.active{display:block;}
-
-/* ===== NAV ===== */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(6,8,16,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--g);height:58px;display:flex;align-items:center;padding:0 2rem;gap:0;}
-.nav-logo{display:flex;align-items:center;gap:10px;margin-right:auto;}
-.nav-box{width:34px;height:34px;border:2px solid var(--g);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:11px;font-weight:900;color:var(--g);text-shadow:0 0 8px var(--g);flex-shrink:0;}
-.nav-brand-text{font-family:'Orbitron',monospace;font-size:10px;color:var(--txm);letter-spacing:2px;text-transform:uppercase;line-height:1.3;}
-.nav-links{display:flex;list-style:none;height:58px;}
-.nav-links li a,.nav-links li button{all:unset;cursor:pointer;height:58px;display:flex;align-items:center;padding:0 13px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--txm);border-right:1px solid var(--border);transition:color .2s,background .2s;white-space:nowrap;}
-.nav-links li a:hover,.nav-links li button:hover{color:var(--g);}
-.nav-links li a.active-nav{color:var(--g);background:rgba(0,255,136,.06);}
-.btn-login{all:unset;cursor:pointer;border:1px solid var(--p);color:var(--p);padding:7px 16px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-left:10px;transition:all .2s;white-space:nowrap;}
-.btn-login:hover{background:var(--p);color:var(--bg);}
-.btn-salir{display:none;all:unset;cursor:pointer;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--txm);padding:0 13px;border-left:1px solid var(--border);height:58px;}
-.btn-salir:hover{color:var(--p);}
-
-/* ===== MODAL ===== */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;align-items:center;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--bg2);border:1px solid var(--c);padding:2.5rem;width:340px;position:relative;box-shadow:0 0 50px rgba(0,229,255,.18);}
-.modal h2{font-family:'Orbitron',monospace;font-size:14px;color:var(--c);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
-.modal p{font-size:13px;color:var(--txm);margin-bottom:24px;}
-.modal-x{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--txm);font-size:22px;cursor:pointer;line-height:1;}
-.fg{margin-bottom:14px;}
-.fg label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);margin-bottom:5px;}
-.fg input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--tx);padding:9px 11px;font-family:'Space Grotesk',sans-serif;font-size:14px;outline:none;transition:border .2s;}
-.fg input:focus{border-color:var(--c);}
-.btn-sub{width:100%;background:var(--g);border:none;color:var(--bg);padding:11px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;margin-top:6px;transition:opacity .2s;}
-.btn-sub:hover{opacity:.85;}
-.hint{margin-top:12px;font-size:11px;color:var(--txm);text-align:center;}
-.hint strong{color:var(--y);}
-
-/* ===== HERO ===== */
-.hero{min-height:100vh;display:flex;align-items:center;padding:100px 6% 60px;position:relative;overflow:hidden;}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.035) 1px,transparent 1px);background-size:55px 55px;}
-.hero-glow1{position:absolute;top:15%;right:8%;width:480px;height:480px;background:radial-gradient(circle,rgba(255,0,153,.13) 0%,transparent 70%);pointer-events:none;}
-.hero-glow2{position:absolute;bottom:15%;left:4%;width:360px;height:360px;background:radial-gradient(circle,rgba(0,229,255,.09) 0%,transparent 70%);pointer-events:none;}
-.hero-content{position:relative;z-index:1;max-width:680px;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--g);padding:5px 14px;margin-bottom:26px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--g);}
-.badge-dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-.hero-name{font-size:15px;color:var(--txm);margin-bottom:8px;letter-spacing:1px;}
-.hero h1{font-family:'Orbitron',monospace;font-size:clamp(26px,5vw,54px);font-weight:900;line-height:1.1;margin-bottom:18px;}
-.hero h1 em{color:var(--g);text-shadow:0 0 24px rgba(0,255,136,.45);font-style:normal;}
-.hero-sub{font-size:17px;color:var(--txm);margin-bottom:36px;line-height:1.7;font-weight:300;}
-.ctas{display:flex;gap:12px;flex-wrap:wrap;}
-.btn-p{background:var(--g);color:var(--bg);border:none;padding:13px 26px;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s;}
-.btn-p:hover{background:#00cc6a;transform:translateY(-1px);}
-.btn-s{background:transparent;color:var(--tx);border:1px solid var(--border);padding:13px 26px;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s;}
-.btn-s:hover{border-color:var(--c);color:var(--c);}
-.stats-panel{position:absolute;right:6%;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:2px;z-index:1;}
-.stat{background:var(--bg2);border:1px solid var(--border);padding:18px 26px;text-align:center;min-width:110px;position:relative;overflow:hidden;}
-.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.stat:nth-child(1)::before{background:var(--g);}
-.stat:nth-child(2)::before{background:var(--p);}
-.stat:nth-child(3)::before{background:var(--c);}
-.stat:nth-child(4)::before{background:var(--y);}
-.stat-n{font-family:'Orbitron',monospace;font-size:34px;font-weight:900;line-height:1;margin-bottom:4px;}
-.stat:nth-child(1) .stat-n{color:var(--g);}
-.stat:nth-child(2) .stat-n{color:var(--p);}
-.stat:nth-child(3) .stat-n{color:var(--c);}
-.stat:nth-child(4) .stat-n{color:var(--y);}
-.stat-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);}
-
-/* ===== SECTIONS ===== */
-.sec{padding:80px 6%;}
-.sec-alt{background:var(--bg2);}
-.sec-header{margin-bottom:48px;}
-.sec-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-.sec-tag::after{content:'';flex:1;max-width:50px;height:1px;background:currentColor;}
-.sec-title{font-family:'Orbitron',monospace;font-size:clamp(18px,3vw,30px);font-weight:700;margin-bottom:10px;}
-.sec-desc{font-size:15px;color:var(--txm);font-weight:300;}
-
-/* ===== UNITS GRID (HOME) ===== */
-.units-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:2px;}
-.ucard{background:var(--bg);padding:30px 26px;border-top:3px solid transparent;transition:all .3s;cursor:pointer;position:relative;}
-.ucard:nth-child(1){border-top-color:var(--u1);}
-.ucard:nth-child(2){border-top-color:var(--u2);}
-.ucard:nth-child(3){border-top-color:var(--u3);}
-.ucard:nth-child(4){border-top-color:var(--u4);}
-.ucard:hover{background:var(--bg3);}
-.ucard-num{font-family:'Orbitron',monospace;font-size:44px;font-weight:900;line-height:1;margin-bottom:14px;opacity:.14;}
-.ucard-badge{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 9px;border:1px solid var(--border);color:var(--txm);margin-bottom:12px;}
-.ucard-title{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;margin-bottom:8px;color:var(--tx);line-height:1.4;}
-.ucard-desc{font-size:13px;color:var(--txm);line-height:1.7;margin-bottom:18px;font-weight:300;}
-.ucard-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px;transition:color .2s;}
-.ucard:nth-child(1):hover .ucard-link{color:var(--u1);}
-.ucard:nth-child(2):hover .ucard-link{color:var(--u2);}
-.ucard:nth-child(3):hover .ucard-link{color:var(--u3);}
-.ucard:nth-child(4):hover .ucard-link{color:var(--u4);}
-
-/* ===== PROFILE ===== */
-.profile-wrap{display:grid;grid-template-columns:260px 1fr;gap:2px;background:var(--border);}
-.profile-side{background:var(--bg2);padding:38px 28px;display:flex;flex-direction:column;align-items:center;text-align:center;}
-.avatar{width:96px;height:96px;border-radius:50%;border:2px solid var(--g);display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:0 0 22px rgba(0,255,136,.28);}
-.avatar-txt{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--g);}
-.p-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;margin-bottom:5px;line-height:1.4;}
-.p-deg{font-size:11px;color:var(--txm);letter-spacing:1px;margin-bottom:22px;}
-.ptags{display:flex;flex-direction:column;gap:7px;width:100%;}
-.ptag{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--txm);padding:7px 10px;background:var(--bg);border-left:2px solid var(--border);}
-.ptag-dot{width:5px;height:5px;background:var(--c);flex-shrink:0;}
-.profile-main{background:var(--bg2);padding:38px 34px;}
-.profile-main h3{font-family:'Orbitron',monospace;font-size:17px;color:var(--tx);margin-bottom:18px;}
-.profile-main p{font-size:15px;color:var(--txm);line-height:1.8;margin-bottom:22px;font-weight:300;}
-.docente{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--y);padding:9px 16px;font-size:13px;color:var(--y);}
-.docente span{color:var(--txm);font-size:10px;letter-spacing:2px;text-transform:uppercase;}
-.btn-back{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);border:1px solid var(--border);padding:9px 16px;margin-top:26px;transition:all .2s;}
-.btn-back:hover{color:var(--c);border-color:var(--c);}
-
-/* ===== UNIT PAGE ===== */
-.unit-hero{padding:100px 6% 50px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
-.unit-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:45px 45px;}
-.unit-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:inline-flex;align-items:center;gap:8px;}
-.unit-tag::before{content:'';display:inline-block;width:18px;height:2px;}
-.u1 .unit-tag{color:var(--u1);}
-.u1 .unit-tag::before{background:var(--u1);}
-.u2 .unit-tag{color:var(--u2);}
-.u2 .unit-tag::before{background:var(--u2);}
-.u3 .unit-tag{color:var(--u3);}
-.u3 .unit-tag::before{background:var(--u3);}
-.u4 .unit-tag{color:var(--u4);}
-.u4 .unit-tag::before{background:var(--u4);}
-.unit-hero h1{font-family:'Orbitron',monospace;font-size:clamp(22px,4vw,44px);font-weight:900;margin-bottom:12px;position:relative;}
-.unit-hero-desc{font-size:16px;color:var(--txm);max-width:600px;font-weight:300;line-height:1.7;position:relative;}
-.unit-num-bg{position:absolute;right:6%;top:50%;transform:translateY(-50%);font-family:'Orbitron',monospace;font-size:clamp(80px,18vw,180px);font-weight:900;opacity:.04;line-height:1;pointer-events:none;}
-.u1 .unit-num-bg{color:var(--u1);}
-.u2 .unit-num-bg{color:var(--u2);}
-.u3 .unit-num-bg{color:var(--u3);}
-.u4 .unit-num-bg{color:var(--u4);}
-
-/* WEEKS GRID */
-.weeks-section{padding:60px 6%;}
-.weeks-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:2px;}
-.week-card{background:var(--bg2);padding:26px 22px;border-left:3px solid transparent;transition:all .25s;position:relative;}
-.u1 .week-card{border-left-color:var(--u1);}
-.u2 .week-card{border-left-color:var(--u2);}
-.u3 .week-card{border-left-color:var(--u3);}
-.u4 .week-card{border-left-color:var(--u4);}
-.week-card:hover{background:var(--bg3);}
-.week-num{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;}
-.u1 .week-num{color:var(--u1);}
-.u2 .week-num{color:var(--u2);}
-.u3 .week-num{color:var(--u3);}
-.u4 .week-num{color:var(--u4);}
-.week-title{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--tx);}
-.week-desc{font-size:13px;color:var(--txm);line-height:1.7;font-weight:300;margin-bottom:18px;}
-.week-items{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;}
-.week-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txm);}
-.week-item::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0;}
-.u1 .week-item::before{background:var(--u1);}
-.u2 .week-item::before{background:var(--u2);}
-.u3 .week-item::before{background:var(--u3);}
-.u4 .week-item::before{background:var(--u4);}
-.week-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:14px;}
-.week-status{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;}
-.status-done{background:rgba(0,255,136,.12);color:var(--g);}
-.status-pending{background:rgba(255,234,0,.08);color:var(--y);}
-.btn-pdf{all:unset;cursor:pointer;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border:1px solid transparent;transition:all .2s;}
-.u1 .btn-pdf{color:var(--u1);border-color:rgba(0,255,136,.3);}
-.u2 .btn-pdf{color:var(--u2);border-color:rgba(255,0,153,.3);}
-.u3 .btn-pdf{color:var(--u3);border-color:rgba(0,229,255,.3);}
-.u4 .btn-pdf{color:var(--u4);border-color:rgba(255,234,0,.3);}
-.btn-pdf:hover{background:rgba(255,255,255,.06);}
-
-/* PROGRESS BAR */
-.unit-progress{padding:30px 6% 0;display:flex;align-items:center;gap:16px;}
-.progress-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);white-space:nowrap;}
-.progress-bar-wrap{flex:1;height:3px;background:var(--border);max-width:300px;}
-.progress-bar{height:100%;transition:width .8s;}
-.u1 .progress-bar{background:var(--u1);}
-.u2 .progress-bar{background:var(--u2);}
-.u3 .progress-bar{background:var(--u3);}
-.u4 .progress-bar{background:var(--u4);}
-.progress-pct{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;}
-.u1 .progress-pct{color:var(--u1);}
-.u2 .progress-pct{color:var(--u2);}
-.u3 .progress-pct{color:var(--u3);}
-.u4 .progress-pct{color:var(--u4);}
-.unit-nav{padding:24px 6% 60px;display:flex;gap:10px;flex-wrap:wrap;}
-
-/* ===== FOOTER ===== */
-footer{background:var(--bg2);border-top:1px solid var(--g);padding:26px 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-.f-copy{font-size:12px;color:var(--txm);}
-.f-copy strong{color:var(--g);}
-.f-right{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);}
-
-/* REVEAL */
-.rv{opacity:0;transform:translateY(20px);transition:opacity .55s,transform .55s;}
-.rv.vis{opacity:1;transform:none;}
-
-/* ADMIN BADGE */
-.admin-badge{display:none;align-items:center;gap:6px;background:rgba(0,255,136,.1);border:1px solid var(--g);color:var(--g);padding:4px 12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-right:8px;}
-.admin-badge.show{display:flex;}
-
-@media(max-width:820px){
-  .stats-panel,.nav-links{display:none;}
-  .profile-wrap{grid-template-columns:1fr;}
-  .hero{padding-top:80px;}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portafolio Académico - Base de Datos II</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- ======== NAV ======== -->
-<nav>
-  <div class="nav-logo">
-    <div class="nav-box">UP</div>
-    <div class="nav-brand-text">UPLA<br>Portafolio · BD II</div>
-  </div>
+<!-- ═══════════════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════════ -->
+<nav id="mainNav">
+  <a class="nav-brand" href="#" onclick="showPage('home')">
+    <img
+      src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+      class="nav-logo-img" alt="UPLA"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+    <div class="nav-logo-fallback" style="display:none">V</div>
+    <div>
+      <div class="nav-brand-text">Universidad Peruana Los Andes</div>
+      <div class="nav-brand-sub">Portafolio · Base de Datos II</div>
+    </div>
+  </a>
+
   <ul class="nav-links">
-    <li><a href="#" onclick="show('home');return false;" class="active-nav" id="nav-home">Inicio</a></li>
-    <li><a href="#" onclick="show('perfil');return false;" id="nav-perfil">Perfil</a></li>
-    <li><a href="#" onclick="show('u1');return false;" id="nav-u1">Unidad I</a></li>
-    <li><a href="#" onclick="show('u2');return false;" id="nav-u2">Unidad II</a></li>
-    <li><a href="#" onclick="show('u3');return false;" id="nav-u3">Unidad III</a></li>
-    <li><a href="#" onclick="show('u4');return false;" id="nav-u4">Unidad IV</a></li>
+    <li><a onclick="showPage('home')">Inicio</a></li>
+    <li><a onclick="showUnidad(1)">Unidad I</a></li>
+    <li><a onclick="showUnidad(2)">Unidad II</a></li>
+    <li><a onclick="showUnidad(3)">Unidad III</a></li>
+    <li><a onclick="showUnidad(4)">Unidad IV</a></li>
+    <li><a onclick="irSobreMi()">Sobre mí</a></li>
   </ul>
-  <div class="admin-badge" id="adminBadge">⚡ Admin</div>
-  <button class="btn-login" id="btnLogin" onclick="document.getElementById('modal').classList.add('open')">⚡ Ingresar</button>
-  <button class="btn-salir" id="btnSalir" onclick="logout()">Salir</button>
+
+  <button class="btn-login" onclick="showPage('login')">Ingresar</button>
 </nav>
 
-<!-- ======== MODAL ======== -->
-<div class="modal-overlay" id="modal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <button class="modal-x" onclick="document.getElementById('modal').classList.remove('open')">×</button>
-    <h2>Acceso al Portal</h2>
-    <p>Solo para el administrador del portafolio</p>
-    <div class="fg"><label>Usuario</label><input type="text" id="inp-user" placeholder="admin"></div>
-    <div class="fg"><label>Contraseña</label><input type="password" id="inp-pass" placeholder="••••"></div>
-    <div id="login-err" style="font-size:12px;color:#ff4444;margin-bottom:8px;display:none;">Usuario o contraseña incorrectos.</div>
-    <button class="btn-sub" onclick="doLogin()">Iniciar Sesión</button>
-    <p class="hint">Demo: <strong>admin</strong> / <strong>1234</strong></p>
-  </div>
-</div>
 
-<!-- ======== PAGE: HOME ======== -->
-<div class="page active" id="page-home">
+<!-- ═══════════════════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-grid"></div>
-    <div class="hero-glow1"></div>
-    <div class="hero-glow2"></div>
-    <div class="hero-content">
-      <div class="hero-badge"><div class="badge-dot"></div>Ciclo Académico 2026 · UPLA</div>
-      <p class="hero-name">Jordan Vera Madueño</p>
-      <h1>Portafolio<br><em>Base de Datos II</em></h1>
-      <p class="hero-sub">Plataforma académica · Ingeniería de Sistemas y Computación.<br>Explora el material de cada semana organizado por unidades.</p>
-      <div class="ctas">
-        <button class="btn-p" onclick="document.getElementById('sec-unidades').scrollIntoView({behavior:'smooth'})">Explorar Unidades →</button>
-        <button class="btn-s" onclick="show('perfil')">Ver Perfil</button>
-      </div>
-    </div>
-    <div class="stats-panel">
-      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Unidades</div></div>
-      <div class="stat"><div class="stat-n">16</div><div class="stat-l">Semanas</div></div>
-      <div class="stat"><div class="stat-n">V</div><div class="stat-l">Ciclo</div></div>
-      <div class="stat"><div class="stat-n">2026</div><div class="stat-l">Año</div></div>
-    </div>
-  </section>
+    <div class="hero-inner">
 
-  <section class="sec sec-alt" id="sec-unidades">
-    <div class="sec-header rv">
-      <div class="sec-tag" style="color:var(--p)">Contenido del Curso</div>
-      <h2 class="sec-title">Unidades del Curso</h2>
-      <p class="sec-desc">4 unidades · 4 semanas cada una · material descargable en PDF.</p>
-    </div>
-    <div class="units-grid">
-      <div class="ucard rv" onclick="show('u1')">
-        <div class="ucard-num">I</div>
-        <div class="ucard-badge">● 4 semanas</div>
-        <h3 class="ucard-title">Introducción a Bases de Datos</h3>
-        <p class="ucard-desc">Fundamentos, modelo relacional, SQL básico y DDL.</p>
-        <button class="ucard-link">Ver semanas →</button>
-      </div>
-      <div class="ucard rv" onclick="show('u2')">
-        <div class="ucard-num">II</div>
-        <div class="ucard-badge">● 4 semanas</div>
-        <h3 class="ucard-title">Diseño y Normalización</h3>
-        <p class="ucard-desc">Modelado ER, formas normales e integridad referencial.</p>
-        <button class="ucard-link">Ver semanas →</button>
-      </div>
-      <div class="ucard rv" onclick="show('u3')">
-        <div class="ucard-num">III</div>
-        <div class="ucard-badge">● 4 semanas</div>
-        <h3 class="ucard-title">SQL Avanzado</h3>
-        <p class="ucard-desc">Procedimientos, vistas, triggers y optimización.</p>
-        <button class="ucard-link">Ver semanas →</button>
-      </div>
-      <div class="ucard rv" onclick="show('u4')">
-        <div class="ucard-num">IV</div>
-        <div class="ucard-badge">● 4 semanas</div>
-        <h3 class="ucard-title">Bases de Datos NoSQL</h3>
-        <p class="ucard-desc">MongoDB, Redis, comparativas y casos de uso reales.</p>
-        <button class="ucard-link">Ver semanas →</button>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="f-copy">© 2026 <strong>Jordan Vera Madueño</strong> · UPLA</div>
-    <div class="f-right">Base de Datos II · Ingeniería de Sistemas y Computación</div>
-  </footer>
-</div>
-
-<!-- ======== PAGE: PERFIL ======== -->
-<div class="page" id="page-perfil">
-  <div style="height:58px;"></div>
-  <section class="sec">
-    <div class="sec-header rv">
-      <div class="sec-tag" style="color:var(--c)">Sobre mí</div>
-      <h2 class="sec-title">Perfil del Estudiante</h2>
-    </div>
-    <div class="profile-wrap rv">
-      <div class="profile-side">
-        <div class="avatar"><span class="avatar-txt">MA</span></div>
-        <p class="p-name">JordanVera Madueño</p>
-        <p class="p-deg">Ingeniería de Sistemas · UPLA</p>
-        <div class="ptags">
-          <div class="ptag"><div class="ptag-dot"></div>Ciclo V</div>
-          <div class="ptag"><div class="ptag-dot"></div>Sección B-1</div>
-          <div class="ptag"><div class="ptag-dot"></div>Base de Datos II</div>
-          <div class="ptag"><div class="ptag-dot"></div>Huancayo, Perú</div>
-          <div class="ptag"><div class="ptag-dot"></div>2026</div>
+      <!-- Contenido izquierdo -->
+      <div class="fadein">
+        <div class="hero-badge">
+          <span></span>Ciclo Académico 2026 · UPLA
         </div>
-      </div>
-      <div class="profile-main">
-        <h3>👨‍💻 Presentación</h3>
-        <p>Estudiante de Ingeniería de Sistemas y Computación en la Universidad Peruana Los Andes. Este portafolio recopila los trabajos académicos del curso Base de Datos II, demostrando dominio progresivo de conceptos como SQL, normalización, procedimientos almacenados y tecnologías NoSQL.</p>
-        <div class="docente"><span>Docente</span> Raul Fernandez Bejarano</div>
-        <br><br>
-        <h3>📚 Competencias del Curso</h3>
-        <p>A lo largo de las 16 semanas se desarrollan competencias en diseño de bases de datos relacionales, escritura de consultas SQL complejas, implementación de objetos de base de datos y comprensión de sistemas NoSQL modernos como herramientas complementarias al modelo relacional.</p>
-        <button class="btn-back" onclick="show('home')">← Volver al Inicio</button>
-      </div>
-    </div>
-  </section>
-  <footer>
-    <div class="f-copy">© 2026 <strong>Jordan Vera Madueño</strong> · UPLA</div>
-    <div class="f-right">Base de Datos II · Ingeniería de Sistemas y Computación</div>
-  </footer>
-</div>
 
-<!-- ======== PAGE: UNIDAD I ======== -->
-<div class="page" id="page-u1">
-  <div style="height:58px;"></div>
-  <div class="unit-hero u1">
-    <div class="unit-hero-grid"></div>
-    <div class="unit-num-bg">I</div>
-    <div style="position:relative;">
-      <div class="unit-tag">Unidad I · 4 Semanas</div>
-      <h1>Introducción a<br>Bases de Datos</h1>
-      <p class="unit-hero-desc">Fundamentos del modelo relacional, conceptos ACID, lenguaje SQL básico y sentencias DDL para creación y gestión de esquemas.</p>
-    </div>
-  </div>
-  <div class="unit-progress u1">
-    <span class="progress-label">Progreso</span>
-    <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
-    <span class="progress-pct">100%</span>
-  </div>
-  <div class="weeks-section u1">
-    <div class="weeks-grid">
-      <!-- Semana 1 -->
-      <div class="week-card rv">
-        <div class="week-num">Semana 01</div>
-        <h3 class="week-title">Introducción a la arquitectura de bases de datos</h3>
-        <p class="week-desc">Conceptos basicos, tipos de SGBD y arquitecturas</p>
-        <div class="trabajos">
-          <div class="trabajo"
-          <div>
-          <div class="trabajo-name">Arquitectura de base de datos</div>
-          <div class="trabajo-meta">//tarea</div>
+        <h1>Vera Madueño<br><em>Jordan</em></h1>
+
+        <p class="hero-sub">
+          Portafolio <strong>Base de Datos II</strong> — plataforma académica de la carrera de
+          <strong>Ingeniería de Sistemas y Computación</strong>.<br>
+          Accede al material de cada semana y descarga los recursos.
+        </p>
+
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="showPage('unidades')">Explorar Unidades</button>
+          <button class="btn-secondary" onclick="showPage('login')">Ingresar al Portal</button>
         </div>
-        <a class="btn-pdf" href="file:///C:/Users/USER/Downloads/Arquitecturas_BD.pdf" target="_blank"> PDF</a>
-          <button class="btn-pdf">↓ PDF</button>
-            </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-num">4</span>
+            <span class="stat-label">Unidades</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">16</span>
+            <span class="stat-label">Semanas</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">HYO</span>
+            <span class="stat-label">Huancayo · Perú</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">2026</span>
+            <span class="stat-label">Año</span>
           </div>
         </div>
       </div>
-      <!-- Semana 2 -->
-      <div class="week-card rv">
-        <div class="week-num">Semana 02</div>
-        <h3 class="week-title">Modelo Relacional</h3>
-        <p class="week-desc">Principios del modelo relacional propuesto por Codd. Conceptos de relación, tupla, atributo y dominio. Claves primarias y foráneas.</p>
-        <div class="week-items">
-          <div class="week-item">Estructura del modelo relacional</div>
-          <div class="week-item">Propiedades de las relaciones</div>
-          <div class="week-item">Claves candidatas, primarias y foráneas</div>
-          <div class="week-item">Restricciones de integridad</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <!-- Semana 3 -->
-      <div class="week-card rv">
-        <div class="week-num">Semana 03</div>
-        <h3 class="week-title">SQL Básico — DML</h3>
-        <p class="week-desc">Lenguaje de Manipulación de Datos. Consultas SELECT, filtros WHERE, ordenamiento ORDER BY y funciones de agregación básicas.</p>
-        <div class="week-items">
-          <div class="week-item">SELECT, FROM, WHERE</div>
-          <div class="week-item">Operadores lógicos y de comparación</div>
-          <div class="week-item">ORDER BY y DISTINCT</div>
-          <div class="week-item">COUNT, SUM, AVG, MIN, MAX</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
+
+      <!-- Visual derecho — órbita animada -->
+      <div class="hero-visual">
+        <div class="orbit">
+          <div class="orbit-inner"></div>
+          <div class="orbit-dot dot1">NoSQL</div>
+          <div class="orbit-dot dot2">SQL</div>
+          <div class="orbit-dot dot3" style="color:var(--gold)">PG</div>
+          <div class="orbit-dot dot4" style="color:var(--gold)">MDB</div>
+          <div class="center-card">
+            <div class="center-card-icon">🗄️</div>
+            <div class="center-card-title">Base de Datos II</div>
+            <div class="center-card-sub">SQL Server · PostgreSQL · MongoDB</div>
+          </div>
         </div>
       </div>
-      <!-- Semana 4 -->
-      <div class="week-card rv">
-        <div class="week-num">Semana 04</div>
-        <h3 class="week-title">SQL DDL — Creación de Esquemas</h3>
-        <p class="week-desc">Lenguaje de Definición de Datos. Creación, modificación y eliminación de tablas, índices y restricciones a nivel de base de datos.</p>
-        <div class="week-items">
-          <div class="week-item">CREATE TABLE y tipos de datos</div>
-          <div class="week-item">ALTER TABLE — modificar estructura</div>
-          <div class="week-item">DROP TABLE y restricciones</div>
-          <div class="week-item">Creación de índices básicos</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
+
+    </div>
+  </section><!-- /hero -->
+
+
+  <!-- UNIDADES -->
+  <div class="section">
+    <div class="section-label">Contenido del curso</div>
+    <h2>Unidades del Curso</h2>
+    <div class="units-grid">
+
+      <div class="unit-card" onclick="showUnidad(1)">
+        <div class="unit-num">I</div>
+        <span class="unit-tag">4 semanas</span>
+        <h3>Introducción a Bases de Datos</h3>
+        <p>Fundamentos, modelo relacional, SQL básico y DDL.</p>
+        <span class="unit-link">Ver material
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+
+      <div class="unit-card" onclick="showUnidad(2)">
+        <div class="unit-num">II</div>
+        <span class="unit-tag">4 semanas</span>
+        <h3>Diseño y Normalización</h3>
+        <p>Modelado ER, formas normales e integridad referencial.</p>
+        <span class="unit-link">Ver material
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+
+      <div class="unit-card" onclick="showUnidad(3)">
+        <div class="unit-num">III</div>
+        <span class="unit-tag">4 semanas</span>
+        <h3>SQL Avanzado</h3>
+        <p>Procedimientos, vistas, triggers y optimización de consultas.</p>
+        <span class="unit-link">Ver material
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+
+      <div class="unit-card" onclick="showUnidad(4)">
+        <div class="unit-num">IV</div>
+        <span class="unit-tag">4 semanas</span>
+        <h3>Bases de Datos NoSQL</h3>
+        <p>MongoDB, Redis, comparativas y casos de uso reales.</p>
+        <span class="unit-link">Ver material
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+
+    </div>
+  </div><!-- /section -->
+
+
+  <!-- SOBRE MÍ -->
+  <section id="sobre-mi" style="padding: 0 0 6rem;">
+    <div class="about-wrap">
+
+      <div class="about-text">
+        <div class="section-label" style="margin-bottom:1rem;">Sobre mí</div>
+        <h2 style="font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.5rem,2.5vw,2rem); margin-bottom:1.5rem; line-height:1.2;">
+          Estudiante de <em style="color:var(--green); font-style:normal;">Ingeniería de Sistemas</em> y Computación
+        </h2>
+
+        <p>Soy estudiante de <strong>Ingeniería de Sistemas y Computación</strong> en la
+          <strong>Universidad Peruana Los Andes</strong>, actualmente cursando el
+          <strong>V ciclo</strong> de mi formación académica.</p>
+
+        <p>Me caracterizo por mi responsabilidad, proactividad y compromiso con el aprendizaje
+          continuo, lo que me permite adaptarme rápidamente a nuevos retos y entornos tecnológicos.</p>
+
+        <p>Me encuentro enfocado en desarrollarme en el área de <strong>desarrollo de software</strong>,
+          fortaleciendo constantemente mis habilidades en programación, resolución de problemas y
+          trabajo en equipo. Mi objetivo es adquirir experiencia práctica que me permita diseñar e
+          implementar soluciones eficientes, innovadoras y de alto impacto.</p>
+
+        <div class="about-contacts">
+          <a href="mailto:diego.vilchez@upla.edu.pe" class="contact-item">
+            <div class="contact-icon">✉️</div>
+            diego.vilchez@upla.edu.pe
+          </a>
+          <a href="https://github.com/diegovilchez" target="_blank" class="contact-item">
+            <div class="contact-icon">💻</div>
+            github.com/diegovilchez
+          </a>
+          <a href="https://linkedin.com/in/diegovilchez" target="_blank" class="contact-item">
+            <div class="contact-icon">🔗</div>
+            linkedin.com/in/diegovilchez
+          </a>
         </div>
       </div>
+
+      <div class="about-image-wrap">
+        <img
+          src="https://diegovilchezestrada-del.github.io/mi-pagina-web/imageperfil.jpg"
+          alt="Diego Michael Vilchez Estrada"
+          class="about-img"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <!-- Fallback si no carga la imagen -->
+        <div class="about-img-fallback">
+          <div class="about-avatar">V</div>
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-label">Carrera</div>
+          <div class="about-badge-val">Ing. Sistemas · V Ciclo</div>
+        </div>
+      </div>
+
+    </div>
+  </section><!-- /sobre-mi -->
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <img
+        src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+        class="footer-logo" alt="UPLA"
+        onerror="this.style.display='none'">
+      <span><strong>UPLA</strong> · Portafolio Base de Datos II · Vilchez Estrada Diego Michael</span>
+    </div>
+    <div>Ing. Sistemas y Computación · © 2026</div>
+  </footer>
+
+</div><!-- /page-home -->
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: UNIDADES
+═══════════════════════════════════════════════════ -->
+<div id="page-unidades" class="page">
+  <div class="units-page">
+
+    <div class="units-page-header">
+      <div class="section-label" style="justify-content:center;">Material del curso</div>
+      <h1>Unidades</h1>
+      <p>Selecciona una unidad para ver y descargar el material académico.</p>
+    </div>
+
+    <div class="units-tabs">
+      <button class="units-tab active" onclick="switchTab(1)">Unidad 01</button>
+      <button class="units-tab"        onclick="switchTab(2)">Unidad 02</button>
+      <button class="units-tab"        onclick="switchTab(3)">Unidad 03</button>
+      <button class="units-tab"        onclick="switchTab(4)">Unidad 04</button>
+      <button class="units-tab units-tab-back" onclick="showPage('home')">← Salir</button>
+    </div>
+
+    <div class="unit-content">
+
+      <!-- UNIDAD 01 -->
+      <div class="unit-content-panel active" id="panel-1">
+        <h2>Unidad 01</h2>
+        <p class="unit-content-sub">Introducción a Bases de Datos · 4 semanas</p>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📄</div>
+            <div>
+              <div class="resource-name">Informe Técnico</div>
+              <div class="resource-desc">Fundamentos, modelo relacional, SQL básico y DDL</div>
+            </div>
+          </div>
+          <a href="https://diegovilchezestrada-del.github.io/mi-pagina-web/unidades.html"
+             class="btn-download" target="_blank">⬇ Descargar</a>
+        </div>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📋</div>
+            <div>
+              <div class="resource-name">Material Semana 1–4</div>
+              <div class="resource-desc">Diapositivas, ejercicios y lecturas complementarias</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download">⬇ Descargar</a>
+        </div>
+      </div>
+
+      <!-- UNIDAD 02 -->
+      <div class="unit-content-panel" id="panel-2">
+        <h2>Unidad 02</h2>
+        <p class="unit-content-sub">Diseño y Normalización · 4 semanas</p>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📄</div>
+            <div>
+              <div class="resource-name">Informe Técnico</div>
+              <div class="resource-desc">Modelado ER, formas normales e integridad referencial</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download">⬇ Descargar</a>
+        </div>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📋</div>
+            <div>
+              <div class="resource-name">Material Semana 5–8</div>
+              <div class="resource-desc">Diagramas ER, ejercicios de normalización 1FN–3FN</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download">⬇ Descargar</a>
+        </div>
+      </div>
+
+      <!-- UNIDAD 03 -->
+      <div class="unit-content-panel" id="panel-3">
+        <h2>Unidad 03</h2>
+        <p class="unit-content-sub">SQL Avanzado · 4 semanas</p>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📄</div>
+            <div>
+              <div class="resource-name">Informe Técnico</div>
+              <div class="resource-desc">Procedimientos almacenados, vistas, triggers y optimización</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download">⬇ Descargar</a>
+        </div>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📋</div>
+            <div>
+              <div class="resource-name">Material Semana 9–12</div>
+              <div class="resource-desc">Scripts SQL Server, ejercicios prácticos y casos</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download">⬇ Descargar</a>
+        </div>
+      </div>
+
+      <!-- UNIDAD 04 -->
+      <div class="unit-content-panel" id="panel-4">
+        <h2>Unidad 04</h2>
+        <p class="unit-content-sub">Bases de Datos NoSQL · 4 semanas</p>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📄</div>
+            <div>
+              <div class="resource-name">Informe Técnico</div>
+              <div class="resource-desc">MongoDB, Redis, comparativas y casos de uso reales</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download">⬇ Descargar</a>
+        </div>
+        <div class="resource-card">
+          <div class="resource-card-info">
+            <div class="resource-icon">📋</div>
+            <div>
+              <div class="resource-name">Material Semana 13–16</div>
+              <div class="resource-desc">Laboratorios MongoDB, comparativa SQL vs NoSQL</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download">⬇ Descargar</a>
+        </div>
+      </div>
+
+    </div><!-- /unit-content -->
+  </div>
+</div><!-- /page-unidades -->
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: LOGIN
+═══════════════════════════════════════════════════ -->
+<div id="page-login" class="page">
+  <div class="login-page">
+    <div class="login-box">
+
+      <button class="btn-back" onclick="showPage('home')">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Volver
+      </button>
+
+      <div class="login-logo-wrap">
+        <img
+          src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+          class="login-logo-img" alt="UPLA"
+          onerror="this.style.display='none'">
+        <div class="login-univ">Universidad Peruana Los Andes</div>
+        <div class="login-sub">Base de Datos II · 2026</div>
+      </div>
+
+      <div class="login-stats">
+        <div class="login-stat">
+          <div class="login-stat-n">4</div>
+          <div class="login-stat-l">Unidades</div>
+        </div>
+        <div class="login-stat">
+          <div class="login-stat-n">16</div>
+          <div class="login-stat-l">Semanas</div>
+        </div>
+        <div class="login-stat">
+          <div class="login-stat-n">2026</div>
+          <div class="login-stat-l">Ciclo</div>
+        </div>
+      </div>
+
+      <div class="login-tags">
+        <span class="login-tag">Huancayo · Perú</span>
+        <span class="login-tag">Ing. Sistemas</span>
+        <span class="login-tag">Acceso Seguro</span>
+      </div>
+
+      <div class="login-title">Acceso al Portal</div>
+      <p class="login-desc">Ingresa tus credenciales para acceder al portafolio académico.</p>
+
+      <div class="form-group">
+        <label class="form-label">Usuario o Correo</label>
+        <input type="text" class="form-input" placeholder="usuario@upla.edu.pe" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-input" placeholder="••••••••" />
+      </div>
+
+      <div class="form-row">
+        <label class="form-check">
+          <input type="checkbox" />
+          <label>Recordarme</label>
+        </label>
+        <a class="form-forgot">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button class="btn-submit" onclick="showPage('home')">Ingresar al Portal</button>
+
+      <div class="login-divider">o continúa con</div>
+
+      <button class="btn-google">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Continuar con Google
+      </button>
+
+      <p class="login-register">
+        ¿No tienes cuenta? <a onclick="showPage('home')">Regístrate aquí</a>
+      </p>
+      <p class="login-ssl">🔒 Conexión cifrada SSL · Acceso protegido</p>
+
     </div>
   </div>
-  <div class="unit-nav">
-    <button class="btn-back" onclick="show('home')">← Volver</button>
-    <button class="btn-s" onclick="show('u2')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">Unidad II →</button>
-  </div>
-  <footer><div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div><div class="f-right">Unidad I · BD II</div></footer>
-</div>
+</div><!-- /page-login -->
 
-<!-- ======== PAGE: UNIDAD II ======== -->
-<div class="page" id="page-u2">
-  <div style="height:58px;"></div>
-  <div class="unit-hero u2">
-    <div class="unit-hero-grid"></div>
-    <div class="unit-num-bg">II</div>
-    <div style="position:relative;">
-      <div class="unit-tag">Unidad II · 4 Semanas</div>
-      <h1>Diseño y<br>Normalización</h1>
-      <p class="unit-hero-desc">Modelado Entidad-Relación, conversión al modelo relacional, formas normales e integridad referencial avanzada.</p>
-    </div>
-  </div>
-  <div class="unit-progress u2">
-    <span class="progress-label">Progreso</span>
-    <div class="progress-bar-wrap"><div class="progress-bar" style="width:75%"></div></div>
-    <span class="progress-pct">75%</span>
-  </div>
-  <div class="weeks-section u2">
-    <div class="weeks-grid">
-      <div class="week-card rv">
-        <div class="week-num">Semana 05</div>
-        <h3 class="week-title">Modelo Entidad-Relación</h3>
-        <p class="week-desc">Diagramas ER para representar entidades, atributos y relaciones del mundo real. Cardinalidades y participación.</p>
-        <div class="week-items">
-          <div class="week-item">Entidades fuertes y débiles</div>
-          <div class="week-item">Atributos simples, compuestos y derivados</div>
-          <div class="week-item">Relaciones y cardinalidad (1:1, 1:N, M:N)</div>
-          <div class="week-item">Participación total y parcial</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 06</div>
-        <h3 class="week-title">Conversión ER al Modelo Relacional</h3>
-        <p class="week-desc">Algoritmos para transformar diagramas ER en esquemas de tablas relacionales. Manejo de relaciones M:N y entidades débiles.</p>
-        <div class="week-items">
-          <div class="week-item">Reglas de conversión de entidades</div>
-          <div class="week-item">Tablas intermedias para M:N</div>
-          <div class="week-item">Herencia y especialización</div>
-          <div class="week-item">Diagramas UML vs Notación Chen</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 07</div>
-        <h3 class="week-title">Formas Normales 1FN, 2FN, 3FN</h3>
-        <p class="week-desc">Proceso de normalización para eliminar redundancias y anomalías de actualización. Primera, segunda y tercera forma normal.</p>
-        <div class="week-items">
-          <div class="week-item">Dependencias funcionales</div>
-          <div class="week-item">1FN: Atomicidad de atributos</div>
-          <div class="week-item">2FN: Dependencia plena de la clave</div>
-          <div class="week-item">3FN: Eliminación de dependencias transitivas</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 08</div>
-        <h3 class="week-title">BCNF e Integridad Referencial</h3>
-        <p class="week-desc">Forma normal de Boyce-Codd. Restricciones de integridad referencial, acciones ON DELETE y ON UPDATE.</p>
-        <div class="week-items">
-          <div class="week-item">Forma normal de Boyce-Codd (BCNF)</div>
-          <div class="week-item">Integridad referencial y FK</div>
-          <div class="week-item">ON DELETE CASCADE / SET NULL</div>
-          <div class="week-item">Desnormalización controlada</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-pending">En progreso</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="unit-nav">
-    <button class="btn-back" onclick="show('u1')">← Unidad I</button>
-    <button class="btn-s" onclick="show('u3')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">Unidad III →</button>
-  </div>
-  <footer><div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div><div class="f-right">Unidad II · BD II</div></footer>
-</div>
 
-<!-- ======== PAGE: UNIDAD III ======== -->
-<div class="page" id="page-u3">
-  <div style="height:58px;"></div>
-  <div class="unit-hero u3">
-    <div class="unit-hero-grid"></div>
-    <div class="unit-num-bg">III</div>
-    <div style="position:relative;">
-      <div class="unit-tag">Unidad III · 4 Semanas</div>
-      <h1>SQL<br>Avanzado</h1>
-      <p class="unit-hero-desc">Procedimientos almacenados, vistas, funciones, triggers y técnicas de optimización de consultas para entornos de producción.</p>
-    </div>
-  </div>
-  <div class="unit-progress u3">
-    <span class="progress-label">Progreso</span>
-    <div class="progress-bar-wrap"><div class="progress-bar" style="width:50%"></div></div>
-    <span class="progress-pct">50%</span>
-  </div>
-  <div class="weeks-section u3">
-    <div class="weeks-grid">
-      <div class="week-card rv">
-        <div class="week-num">Semana 09</div>
-        <h3 class="week-title">Consultas Avanzadas y JOINs</h3>
-        <p class="week-desc">Combinación de tablas con INNER, LEFT, RIGHT y FULL JOIN. Subconsultas correlacionadas y operadores EXISTS / IN / ANY.</p>
-        <div class="week-items">
-          <div class="week-item">INNER JOIN, LEFT JOIN, RIGHT JOIN</div>
-          <div class="week-item">FULL OUTER JOIN y CROSS JOIN</div>
-          <div class="week-item">Subconsultas en WHERE y FROM</div>
-          <div class="week-item">EXISTS, IN, ANY, ALL</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 10</div>
-        <h3 class="week-title">Vistas y Procedimientos Almacenados</h3>
-        <p class="week-desc">Creación y gestión de vistas para simplificar consultas. Procedimientos almacenados con parámetros de entrada y salida.</p>
-        <div class="week-items">
-          <div class="week-item">CREATE VIEW y WITH CHECK OPTION</div>
-          <div class="week-item">Vistas materializadas</div>
-          <div class="week-item">CREATE PROCEDURE con parámetros</div>
-          <div class="week-item">Control de flujo IF / WHILE / CASE</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 11</div>
-        <h3 class="week-title">Funciones y Triggers</h3>
-        <p class="week-desc">Funciones escalares y de tabla. Triggers de fila y de sentencia para auditoría e integridad de negocio automatizada.</p>
-        <div class="week-items">
-          <div class="week-item">Funciones escalares y de tabla</div>
-          <div class="week-item">Triggers BEFORE / AFTER INSERT/UPDATE/DELETE</div>
-          <div class="week-item">Tablas NEW y OLD en triggers</div>
-          <div class="week-item">Auditoría automática con triggers</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-pending">En progreso</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 12</div>
-        <h3 class="week-title">Optimización de Consultas</h3>
-        <p class="week-desc">Planes de ejecución, índices avanzados, particionamiento y técnicas de tuning para consultas de alto rendimiento.</p>
-        <div class="week-items">
-          <div class="week-item">EXPLAIN / ANALYZE y planes de ejecución</div>
-          <div class="week-item">Índices compuestos y covering indexes</div>
-          <div class="week-item">Particionamiento de tablas</div>
-          <div class="week-item">Query hints y estadísticas</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-pending">Pendiente</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="unit-nav">
-    <button class="btn-back" onclick="show('u2')">← Unidad II</button>
-    <button class="btn-s" onclick="show('u4')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">Unidad IV →</button>
-  </div>
-  <footer><div class="f-copy">© 2026 <strong>Michael Axel Vilcapoma Ochoa</strong> · UPLA</div><div class="f-right">Unidad III · BD II</div></footer>
-</div>
-
-<!-- ======== PAGE: UNIDAD IV ======== -->
-<div class="page" id="page-u4">
-  <div style="height:58px;"></div>
-  <div class="unit-hero u4">
-    <div class="unit-hero-grid"></div>
-    <div class="unit-num-bg">IV</div>
-    <div style="position:relative;">
-      <div class="unit-tag">Unidad IV · 4 Semanas</div>
-      <h1>Bases de Datos<br>NoSQL</h1>
-      <p class="unit-hero-desc">Sistemas de bases de datos no relacionales: MongoDB, Redis, Cassandra. Casos de uso reales y comparativas con el modelo relacional.</p>
-    </div>
-  </div>
-  <div class="unit-progress u4">
-    <span class="progress-label">Progreso</span>
-    <div class="progress-bar-wrap"><div class="progress-bar" style="width:25%"></div></div>
-    <span class="progress-pct">25%</span>
-  </div>
-  <div class="weeks-section u4">
-    <div class="weeks-grid">
-      <div class="week-card rv">
-        <div class="week-num">Semana 13</div>
-        <h3 class="week-title">Introducción a NoSQL</h3>
-        <p class="week-desc">Origen del movimiento NoSQL, teorema CAP, tipos de bases de datos NoSQL y cuándo elegirlas sobre las relacionales.</p>
-        <div class="week-items">
-          <div class="week-item">Teorema CAP: Consistencia, Disponibilidad, Partición</div>
-          <div class="week-item">Tipos: documento, clave-valor, columnar, grafo</div>
-          <div class="week-item">ACID vs BASE</div>
-          <div class="week-item">Casos de uso por tipo de BD</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-done">Completado</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 14</div>
-        <h3 class="week-title">MongoDB — Base de Datos Documental</h3>
-        <p class="week-desc">Modelo de documentos JSON/BSON. Operaciones CRUD, consultas con filtros, agregaciones y índices en MongoDB.</p>
-        <div class="week-items">
-          <div class="week-item">Colecciones y documentos BSON</div>
-          <div class="week-item">insertOne, find, updateMany, deleteOne</div>
-          <div class="week-item">Pipeline de Aggregation</div>
-          <div class="week-item">Índices y explain() en MongoDB</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-pending">En progreso</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 15</div>
-        <h3 class="week-title">Redis — Clave-Valor en Memoria</h3>
-        <p class="week-desc">Estructuras de datos de Redis: strings, hashes, listas, sets y sorted sets. Caché, pub/sub y expiración de claves.</p>
-        <div class="week-items">
-          <div class="week-item">SET, GET, HSET, LPUSH, SADD</div>
-          <div class="week-item">TTL y expiración automática de claves</div>
-          <div class="week-item">Redis como caché de base de datos</div>
-          <div class="week-item">Pub/Sub y streams</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-pending">Pendiente</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-      <div class="week-card rv">
-        <div class="week-num">Semana 16</div>
-        <h3 class="week-title">Comparativas y Proyecto Final</h3>
-        <p class="week-desc">Análisis comparativo SQL vs NoSQL. Criterios de selección de tecnología. Presentación del proyecto integrador del curso.</p>
-        <div class="week-items">
-          <div class="week-item">Tabla comparativa SQL vs MongoDB vs Redis</div>
-          <div class="week-item">Arquitecturas híbridas (Polyglot Persistence)</div>
-          <div class="week-item">Exposición del proyecto final</div>
-          <div class="week-item">Evaluación integradora</div>
-        </div>
-        <div class="week-footer">
-          <span class="week-status status-pending">Pendiente</span>
-          <button class="btn-pdf">↓ PDF</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="unit-nav">
-    <button class="btn-back" onclick="show('u3')">← Unidad III</button>
-    <button class="btn-s" onclick="show('home')" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;">↑ Inicio</button>
-  </div>
-  <footer><div class="f-copy">© 2026 <strong>Jordan Vera Madueño</strong> · UPLA</div><div class="f-right">Unidad IV · BD II</div></footer>
-</div>
-
-<script>
-// ===== PAGE ROUTER =====
-const pages = ['home','perfil','u1','u2','u3','u4'];
-const navIds = ['nav-home','nav-perfil','nav-u1','nav-u2','nav-u3','nav-u4'];
-
-function show(id){
-  pages.forEach(p=>{
-    document.getElementById('page-'+p).classList.toggle('active',p===id);
-  });
-  navIds.forEach((n,i)=>{
-    const el=document.getElementById(n);
-    if(el) el.classList.toggle('active-nav',pages[i]===id);
-  });
-  window.scrollTo({top:0,behavior:'smooth'});
-  setTimeout(()=>initReveal(),100);
-}
-
-// ===== LOGIN =====
-let isAdmin=false;
-function doLogin(){
-  const u=document.getElementById('inp-user').value.trim();
-  const p=document.getElementById('inp-pass').value.trim();
-  const err=document.getElementById('login-err');
-  if(u==='admin'&&p==='1234'){
-    isAdmin=true;
-    document.getElementById('modal').classList.remove('open');
-    document.getElementById('btnLogin').style.display='none';
-    document.getElementById('btnSalir').style.display='flex';
-    document.getElementById('adminBadge').classList.add('show');
-    err.style.display='none';
-  } else {
-    err.style.display='block';
-  }
-}
-function logout(){
-  isAdmin=false;
-  document.getElementById('btnLogin').style.display='';
-  document.getElementById('btnSalir').style.display='none';
-  document.getElementById('adminBadge').classList.remove('show');
-}
-document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-
-// ===== REVEAL ON SCROLL =====
-function initReveal(){
-  const els=document.querySelectorAll('.page.active .rv');
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach((e,i)=>{
-      if(e.isIntersecting) setTimeout(()=>e.target.classList.add('vis'),i*70);
-    });
-  },{threshold:0.1});
-  els.forEach(el=>{el.classList.remove('vis');obs.observe(el);});
-}
-initReveal();
-</script>
+<!-- ═══════════════════════════════════════════════════
+     SCRIPT
+═══════════════════════════════════════════════════ -->
+<script src="script.js"></script>
 </body>
 </html>
