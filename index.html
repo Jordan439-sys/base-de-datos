@@ -5,88 +5,489 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portafolio Académico - Base de Datos II</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --bg:      #0a0f0d;
+      --surface: #111a14;
+      --card:    #152019;
+      --border:  #1e3326;
+      --green:   #2ecc71;
+      --green2:  #27ae60;
+      --gold:    #f0c040;
+      --gold2:   #d4a820;
+      --text:    #e8f5ec;
+      --muted:   #7da98a;
+      --radius:  14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ═══ PAGES ═══ */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* ═══ NAVBAR ═══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 70px;
+      background: rgba(10,15,13,.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand { display: flex; align-items: center; gap: .8rem; text-decoration: none; }
+    .nav-logo-img { width: 40px; height: 40px; border-radius: 50%; object-fit: contain; background: #fff; padding: 3px; }
+    .nav-logo-fallback {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--bg);
+    }
+    .nav-brand-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .92rem; color: var(--text); line-height: 1.2; }
+    .nav-brand-sub  { font-size: .68rem; color: var(--muted); font-weight: 400; }
+    .nav-links { display: flex; align-items: center; gap: 1.6rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: .87rem; font-weight: 500;
+      letter-spacing: .02em; transition: color .2s; cursor: pointer;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .btn-login {
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      color: var(--bg); font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: .8rem; letter-spacing: .06em; text-transform: uppercase;
+      padding: .48rem 1.25rem; border-radius: 8px; text-decoration: none; cursor: pointer;
+      transition: opacity .2s, transform .2s; border: none;
+    }
+    .btn-login:hover { opacity: .85; transform: translateY(-1px); }
+
+    /* ═══ PAGE: HOME ═══ */
+    /* hero */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 7rem 2.5rem 4rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content:''; position:absolute; top:-200px; right:-200px;
+      width:700px; height:700px; border-radius:50%;
+      background:radial-gradient(circle,rgba(46,204,113,.12) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .hero::after {
+      content:''; position:absolute; bottom:-150px; left:-150px;
+      width:500px; height:500px; border-radius:50%;
+      background:radial-gradient(circle,rgba(240,192,64,.08) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .hero-inner {
+      max-width:1100px; margin:0 auto; width:100%;
+      display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;
+    }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:rgba(46,204,113,.1); border:1px solid rgba(46,204,113,.25);
+      color:var(--green); font-size:.76rem; font-weight:700; letter-spacing:.08em;
+      text-transform:uppercase; padding:.38rem 1rem; border-radius:100px; margin-bottom:1.4rem;
+    }
+    .hero-badge span { width:6px; height:6px; border-radius:50%; background:var(--green); display:inline-block; animation:pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+    .hero h1 {
+      font-family:'Syne',sans-serif; font-weight:800;
+      font-size:clamp(2.1rem,3.8vw,3.3rem); line-height:1.1; margin-bottom:1rem;
+    }
+    .hero h1 em { font-style:normal; color:var(--green); }
+    .hero-sub { color:var(--muted); font-size:.98rem; margin-bottom:2rem; max-width:460px; }
+    .hero-sub strong { color:var(--text); }
+    .hero-ctas { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:3rem; }
+    .btn-primary {
+      background:linear-gradient(135deg,var(--green),var(--green2));
+      color:var(--bg); font-family:'Syne',sans-serif; font-weight:700;
+      font-size:.86rem; letter-spacing:.04em; padding:.72rem 1.75rem;
+      border-radius:10px; text-decoration:none; border:none; cursor:pointer;
+      transition:transform .2s,box-shadow .2s;
+      box-shadow:0 4px 20px rgba(46,204,113,.3);
+    }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(46,204,113,.4); }
+    .btn-secondary {
+      border:1px solid var(--border); color:var(--text); font-family:'Syne',sans-serif;
+      font-weight:600; font-size:.86rem; letter-spacing:.04em; padding:.72rem 1.75rem;
+      border-radius:10px; text-decoration:none; background:transparent; cursor:pointer;
+      transition:border-color .2s,background .2s;
+    }
+    .btn-secondary:hover { border-color:var(--green); background:rgba(46,204,113,.06); }
+    .hero-stats { display:flex; gap:2rem; flex-wrap:wrap; }
+    .stat { display:flex; flex-direction:column; }
+    .stat-num { font-family:'Syne',sans-serif; font-size:1.55rem; font-weight:800; color:var(--gold); }
+    .stat-label { font-size:.75rem; color:var(--muted); letter-spacing:.05em; text-transform:uppercase; }
+    /* orbit */
+    .hero-visual { position:relative; display:flex; align-items:center; justify-content:center; }
+    .orbit {
+      width:320px; height:320px; border-radius:50%;
+      border:1px dashed rgba(46,204,113,.2);
+      position:relative; animation:spin 20s linear infinite;
+    }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .orbit-inner {
+      width:220px; height:220px; border-radius:50%;
+      border:1px dashed rgba(240,192,64,.15);
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      animation:spin 12s linear infinite reverse;
+    }
+    .orbit-dot {
+      position:absolute; width:46px; height:46px; border-radius:50%;
+      background:var(--card); border:1px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.65rem; font-weight:700; letter-spacing:.02em; color:var(--green);
+      animation:despin 20s linear infinite;
+    }
+    @keyframes despin { to{transform:rotate(-360deg)} }
+    .dot1 { top:-23px; left:50%; transform:translateX(-50%); }
+    .dot2 { bottom:-23px; left:50%; transform:translateX(-50%); }
+    .dot3 { left:-23px; top:50%; transform:translateY(-50%); }
+    .dot4 { right:-23px; top:50%; transform:translateY(-50%); }
+    .center-card {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1.3rem 1.6rem; text-align:center; min-width:150px;
+    }
+    .center-card-icon {
+      width:46px; height:46px; border-radius:12px; margin:0 auto .6rem;
+      background:linear-gradient(135deg,var(--green),var(--gold));
+      display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+    }
+    .center-card-title { font-family:'Syne',sans-serif; font-weight:700; font-size:.88rem; color:var(--text); }
+    .center-card-sub   { font-size:.72rem; color:var(--muted); }
+
+    /* units section */
+    .section { padding:6rem 2.5rem; max-width:1100px; margin:0 auto; }
+    .section-label {
+      display:inline-flex; align-items:center; gap:.4rem;
+      color:var(--gold); font-size:.75rem; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; margin-bottom:.9rem;
+    }
+    .section-label::before { content:''; width:18px; height:2px; background:var(--gold); }
+    .section h2 {
+      font-family:'Syne',sans-serif; font-weight:800;
+      font-size:clamp(1.7rem,2.8vw,2.5rem); margin-bottom:2.8rem; line-height:1.15;
+    }
+    .units-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1.4rem; }
+    .unit-card {
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:1.8rem 1.4rem; text-decoration:none; color:var(--text);
+      transition:transform .25s,border-color .25s,box-shadow .25s;
+      position:relative; overflow:hidden; cursor:pointer;
+    }
+    .unit-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,var(--green),var(--gold));
+      transform:scaleX(0); transform-origin:left; transition:transform .3s;
+    }
+    .unit-card:hover::before { transform:scaleX(1); }
+    .unit-card:hover { transform:translateY(-4px); border-color:var(--green); box-shadow:0 12px 40px rgba(0,0,0,.4); }
+    .unit-num { font-family:'Syne',sans-serif; font-size:2.3rem; font-weight:800; color:rgba(46,204,113,.15); line-height:1; margin-bottom:.4rem; }
+    .unit-tag {
+      display:inline-block; background:rgba(240,192,64,.1); color:var(--gold);
+      font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+      padding:.22rem .65rem; border-radius:6px; margin-bottom:.7rem;
+    }
+    .unit-card h3 { font-family:'Syne',sans-serif; font-weight:700; font-size:.97rem; margin-bottom:.45rem; }
+    .unit-card p  { font-size:.84rem; color:var(--muted); margin-bottom:1.1rem; }
+    .unit-link {
+      display:inline-flex; align-items:center; gap:.4rem;
+      color:var(--green); font-size:.8rem; font-weight:600; letter-spacing:.03em;
+    }
+    .unit-link svg { transition:transform .2s; }
+    .unit-card:hover .unit-link svg { transform:translateX(4px); }
+
+    /* about */
+    .about-wrap {
+      display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:3.5rem; margin:0 2.5rem;
+    }
+    .about-text p { color:var(--muted); font-size:.94rem; margin-bottom:1.1rem; }
+    .about-text p strong { color:var(--text); }
+    .about-contacts { display:flex; flex-direction:column; gap:.75rem; margin-top:1.7rem; }
+    .contact-item {
+      display:flex; align-items:center; gap:.7rem;
+      color:var(--muted); font-size:.84rem; text-decoration:none;
+      transition:color .2s;
+    }
+    .contact-item:hover { color:var(--green); }
+    .contact-icon {
+      width:34px; height:34px; border-radius:8px;
+      background:var(--card); border:1px solid var(--border);
+      display:flex; align-items:center; justify-content:center; font-size:.88rem;
+      flex-shrink:0;
+    }
+    .about-image-wrap { position:relative; }
+    .about-img {
+      width:100%; aspect-ratio:3/4; object-fit:cover;
+      border-radius:var(--radius); display:block;
+      border:1px solid var(--border);
+    }
+    .about-badge {
+      position:absolute; bottom:1.5rem; left:-1.5rem;
+      background:var(--bg); border:1px solid var(--border);
+      border-radius:var(--radius); padding:.9rem 1.1rem;
+      box-shadow:0 10px 30px rgba(0,0,0,.6);
+    }
+    .about-badge-label { font-size:.68rem; color:var(--muted); margin-bottom:.15rem; text-transform:uppercase; letter-spacing:.05em; }
+    .about-badge-val   { font-family:'Syne',sans-serif; font-weight:700; font-size:.88rem; color:var(--green); }
+
+    /* footer */
+    footer {
+      margin-top:5rem; padding:2rem 2.5rem;
+      border-top:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.75rem;
+      color:var(--muted); font-size:.8rem;
+    }
+    .footer-brand { display:flex; align-items:center; gap:.6rem; }
+    .footer-logo { width:28px; height:28px; border-radius:50%; object-fit:contain; background:#fff; padding:2px; }
+    footer strong { color:var(--text); }
+
+    /* ═══ PAGE: UNIDADES ═══ */
+    .units-page { padding-top: 70px; }
+    .units-page-header {
+      background: linear-gradient(135deg, var(--surface), var(--card));
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 2.5rem 3rem;
+      text-align: center;
+    }
+    .units-page-header h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.8rem,3vw,2.8rem); margin-bottom:.5rem; }
+    .units-page-header p  { color:var(--muted); font-size:.95rem; }
+
+    .units-tabs {
+      display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap;
+      padding: 2rem 2.5rem 0;
+    }
+    .units-tab {
+      background:var(--card); border:1px solid var(--border); color:var(--muted);
+      font-family:'Syne',sans-serif; font-weight:700; font-size:.82rem; letter-spacing:.05em;
+      text-transform:uppercase; padding:.55rem 1.3rem; border-radius:8px; cursor:pointer;
+      transition:all .2s;
+    }
+    .units-tab.active, .units-tab:hover {
+      background:var(--green); border-color:var(--green); color:var(--bg);
+    }
+    .units-tab-back {
+      background:rgba(240,192,64,.1); border:1px solid rgba(240,192,64,.3); color:var(--gold);
+    }
+    .units-tab-back:hover { background:var(--gold); border-color:var(--gold); color:var(--bg); }
+
+    .unit-content { max-width:800px; margin:0 auto; padding:3rem 2.5rem; }
+    .unit-content-panel { display:none; }
+    .unit-content-panel.active { display:block; }
+    .unit-content h2 {
+      font-family:'Syne',sans-serif; font-weight:800; font-size:2rem; margin-bottom:.4rem;
+    }
+    .unit-content .unit-content-sub { color:var(--muted); font-size:.9rem; margin-bottom:2rem; }
+
+    .resource-card {
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:1.5rem; display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; margin-bottom:1rem;
+    }
+    .resource-card-info { display:flex; align-items:center; gap:1rem; }
+    .resource-icon {
+      width:44px; height:44px; border-radius:10px;
+      background:linear-gradient(135deg,var(--green),var(--gold));
+      display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;
+    }
+    .resource-name { font-family:'Syne',sans-serif; font-weight:700; font-size:.95rem; }
+    .resource-desc { font-size:.82rem; color:var(--muted); }
+    .btn-download {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:rgba(46,204,113,.12); border:1px solid rgba(46,204,113,.3);
+      color:var(--green); font-family:'Syne',sans-serif; font-weight:700;
+      font-size:.78rem; letter-spacing:.05em; text-transform:uppercase;
+      padding:.45rem 1rem; border-radius:8px; cursor:pointer;
+      transition:background .2s; white-space:nowrap; text-decoration:none;
+    }
+    .btn-download:hover { background:rgba(46,204,113,.25); }
+
+    /* ═══ PAGE: LOGIN ═══ */
+    .login-page {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:2rem; position:relative; overflow:hidden;
+    }
+    .login-page::before {
+      content:''; position:absolute; top:-200px; left:-200px;
+      width:600px; height:600px; border-radius:50%;
+      background:radial-gradient(circle,rgba(46,204,113,.1) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .login-page::after {
+      content:''; position:absolute; bottom:-150px; right:-150px;
+      width:500px; height:500px; border-radius:50%;
+      background:radial-gradient(circle,rgba(240,192,64,.07) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .login-box {
+      background:var(--surface); border:1px solid var(--border); border-radius:20px;
+      padding:3rem 2.5rem; width:100%; max-width:440px; position:relative; z-index:1;
+    }
+    .login-logo-wrap { text-align:center; margin-bottom:1.8rem; }
+    .login-logo-img { width:52px; height:52px; border-radius:50%; object-fit:contain; background:#fff; padding:4px; }
+    .login-univ { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin-top:.6rem; }
+    .login-sub  { font-size:.78rem; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-top:.2rem; }
+
+    .login-stats {
+      display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap;
+      background:var(--card); border:1px solid var(--border); border-radius:12px;
+      padding:1rem; margin-bottom:2rem;
+    }
+    .login-stat { text-align:center; }
+    .login-stat-n { font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; color:var(--gold); }
+    .login-stat-l { font-size:.68rem; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; }
+
+    .login-tags { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin-bottom:1.8rem; }
+    .login-tag {
+      font-size:.7rem; font-weight:600; letter-spacing:.05em;
+      padding:.28rem .7rem; border-radius:6px;
+      background:rgba(46,204,113,.1); border:1px solid rgba(46,204,113,.2); color:var(--green);
+    }
+
+    .login-title {
+      font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem;
+      text-align:center; margin-bottom:.35rem;
+    }
+    .login-desc { font-size:.85rem; color:var(--muted); text-align:center; margin-bottom:1.8rem; }
+
+    .form-group { margin-bottom:1.1rem; }
+    .form-label {
+      display:block; font-size:.72rem; font-weight:700; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--muted); margin-bottom:.45rem;
+    }
+    .form-input {
+      width:100%; background:var(--card); border:1px solid var(--border);
+      color:var(--text); font-family:'DM Sans',sans-serif; font-size:.9rem;
+      padding:.7rem 1rem; border-radius:10px; outline:none;
+      transition:border-color .2s;
+    }
+    .form-input:focus { border-color:var(--green); }
+    .form-input::placeholder { color:var(--muted); opacity:.6; }
+
+    .form-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; }
+    .form-check { display:flex; align-items:center; gap:.45rem; cursor:pointer; }
+    .form-check input { accent-color:var(--green); }
+    .form-check label { font-size:.82rem; color:var(--muted); cursor:pointer; }
+    .form-forgot { font-size:.78rem; color:var(--green); text-decoration:none; font-weight:600; cursor:pointer; }
+    .form-forgot:hover { text-decoration:underline; }
+
+    .btn-submit {
+      width:100%; background:linear-gradient(135deg,var(--green),var(--green2));
+      color:var(--bg); font-family:'Syne',sans-serif; font-weight:800;
+      font-size:.9rem; letter-spacing:.06em; text-transform:uppercase;
+      padding:.85rem; border-radius:10px; border:none; cursor:pointer;
+      transition:opacity .2s,transform .2s; box-shadow:0 4px 20px rgba(46,204,113,.3);
+    }
+    .btn-submit:hover { opacity:.88; transform:translateY(-1px); }
+
+    .login-divider {
+      display:flex; align-items:center; gap:.8rem;
+      color:var(--muted); font-size:.75rem; letter-spacing:.06em; text-transform:uppercase;
+      margin:1.3rem 0;
+    }
+    .login-divider::before, .login-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    .btn-google {
+      width:100%; background:var(--card); border:1px solid var(--border);
+      color:var(--text); font-family:'DM Sans',sans-serif; font-weight:500;
+      font-size:.88rem; padding:.72rem; border-radius:10px; cursor:pointer;
+      transition:border-color .2s; display:flex; align-items:center; justify-content:center; gap:.6rem;
+    }
+    .btn-google:hover { border-color:var(--green); }
+    .google-icon { width:18px; }
+
+    .login-register { text-align:center; margin-top:1.3rem; font-size:.82rem; color:var(--muted); }
+    .login-register a { color:var(--green); font-weight:700; cursor:pointer; text-decoration:none; }
+    .login-register a:hover { text-decoration:underline; }
+    .login-ssl { text-align:center; margin-top:1rem; font-size:.72rem; color:var(--muted); opacity:.6; }
+
+    .btn-back {
+      display:inline-flex; align-items:center; gap:.5rem;
+      color:var(--muted); font-size:.82rem; font-weight:600; cursor:pointer;
+      background:none; border:none; margin-bottom:1.5rem; transition:color .2s;
+    }
+    .btn-back:hover { color:var(--green); }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width:768px) {
+      .hero-inner, .about-wrap { grid-template-columns:1fr; gap:2.5rem; }
+      .hero-visual { display:none; }
+      nav .nav-links { display:none; }
+      .about-wrap { margin:0 1rem; padding:2rem 1.5rem; }
+      .about-badge { display:none; }
+      footer { flex-direction:column; text-align:center; }
+      .login-box { padding:2rem 1.5rem; }
+    }
+
+    /* fade-in */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+    .fadein > * { animation:fadeUp .65s both; }
+    .fadein > *:nth-child(1){animation-delay:.08s}
+    .fadein > *:nth-child(2){animation-delay:.17s}
+    .fadein > *:nth-child(3){animation-delay:.26s}
+    .fadein > *:nth-child(4){animation-delay:.35s}
+    .fadein > *:nth-child(5){animation-delay:.44s}
+  </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════
-     NAVBAR
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════ NAVBAR ═══════════════════════════════ -->
 <nav id="mainNav">
   <a class="nav-brand" href="#" onclick="showPage('home')">
-    <img
-      src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
-      class="nav-logo-img" alt="UPLA"
-      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+    <img src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+         class="nav-logo-img" alt="UPLA"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div class="nav-logo-fallback" style="display:none">V</div>
     <div>
       <div class="nav-brand-text">Universidad Peruana Los Andes</div>
       <div class="nav-brand-sub">Portafolio · Base de Datos II</div>
     </div>
   </a>
-
   <ul class="nav-links">
     <li><a onclick="showPage('home')">Inicio</a></li>
     <li><a onclick="showUnidad(1)">Unidad I</a></li>
     <li><a onclick="showUnidad(2)">Unidad II</a></li>
     <li><a onclick="showUnidad(3)">Unidad III</a></li>
     <li><a onclick="showUnidad(4)">Unidad IV</a></li>
-    <li><a onclick="irSobreMi()">Sobre mí</a></li>
+    <li><a onclick="showPage('home');setTimeout(()=>document.getElementById('sobre-mi').scrollIntoView({behavior:'smooth'}),100)">Sobre mí</a></li>
   </ul>
-
   <button class="btn-login" onclick="showPage('login')">Ingresar</button>
 </nav>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: HOME
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════ PAGE: HOME ═══════════════════════════════ -->
 <div id="page-home" class="page active">
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
-
-      <!-- Contenido izquierdo -->
       <div class="fadein">
-        <div class="hero-badge">
-          <span></span>Ciclo Académico 2026 · UPLA
-        </div>
-
+        <div class="hero-badge"><span></span>Ciclo Académico 2026 · UPLA</div>
         <h1>Vera Madueño<br><em>Jordan</em></h1>
-
         <p class="hero-sub">
           Portafolio <strong>Base de Datos II</strong> — plataforma académica de la carrera de
           <strong>Ingeniería de Sistemas y Computación</strong>.<br>
           Accede al material de cada semana y descarga los recursos.
         </p>
-
         <div class="hero-ctas">
           <button class="btn-primary" onclick="showPage('unidades')">Explorar Unidades</button>
           <button class="btn-secondary" onclick="showPage('login')">Ingresar al Portal</button>
         </div>
-
         <div class="hero-stats">
-          <div class="stat">
-            <span class="stat-num">4</span>
-            <span class="stat-label">Unidades</span>
-          </div>
-          <div class="stat">
-            <span class="stat-num">16</span>
-            <span class="stat-label">Semanas</span>
-          </div>
-          <div class="stat">
-            <span class="stat-num">HYO</span>
-            <span class="stat-label">Huancayo · Perú</span>
-          </div>
-          <div class="stat">
-            <span class="stat-num">2026</span>
-            <span class="stat-label">Año</span>
-          </div>
+          <div class="stat"><span class="stat-num">4</span><span class="stat-label">Unidades</span></div>
+          <div class="stat"><span class="stat-num">16</span><span class="stat-label">Semanas</span></div>
+          <div class="stat"><span class="stat-num">HYO</span><span class="stat-label">Huancayo · Perú</span></div>
+          <div class="stat"><span class="stat-num">2026</span><span class="stat-label">Año</span></div>
         </div>
       </div>
 
-      <!-- Visual derecho — órbita animada -->
       <div class="hero-visual">
         <div class="orbit">
           <div class="orbit-inner"></div>
@@ -101,134 +502,90 @@
           </div>
         </div>
       </div>
-
     </div>
-  </section><!-- /hero -->
-
+  </section>
 
   <!-- UNIDADES -->
   <div class="section">
     <div class="section-label">Contenido del curso</div>
     <h2>Unidades del Curso</h2>
     <div class="units-grid">
-
       <div class="unit-card" onclick="showUnidad(1)">
         <div class="unit-num">I</div>
         <span class="unit-tag">4 semanas</span>
         <h3>Introducción a Bases de Datos</h3>
         <p>Fundamentos, modelo relacional, SQL básico y DDL.</p>
-        <span class="unit-link">Ver material
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
+        <span class="unit-link">Ver material <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
-
       <div class="unit-card" onclick="showUnidad(2)">
         <div class="unit-num">II</div>
         <span class="unit-tag">4 semanas</span>
         <h3>Diseño y Normalización</h3>
         <p>Modelado ER, formas normales e integridad referencial.</p>
-        <span class="unit-link">Ver material
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
+        <span class="unit-link">Ver material <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
-
       <div class="unit-card" onclick="showUnidad(3)">
         <div class="unit-num">III</div>
         <span class="unit-tag">4 semanas</span>
         <h3>SQL Avanzado</h3>
         <p>Procedimientos, vistas, triggers y optimización de consultas.</p>
-        <span class="unit-link">Ver material
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
+        <span class="unit-link">Ver material <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
-
       <div class="unit-card" onclick="showUnidad(4)">
         <div class="unit-num">IV</div>
         <span class="unit-tag">4 semanas</span>
         <h3>Bases de Datos NoSQL</h3>
         <p>MongoDB, Redis, comparativas y casos de uso reales.</p>
-        <span class="unit-link">Ver material
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
+        <span class="unit-link">Ver material <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
-
     </div>
-  </div><!-- /section -->
-
+  </div>
 
   <!-- SOBRE MÍ -->
-  <section id="sobre-mi" style="padding: 0 0 6rem;">
+  <section id="sobre-mi" style="padding:0 0 6rem;">
     <div class="about-wrap">
-
       <div class="about-text">
         <div class="section-label" style="margin-bottom:1rem;">Sobre mí</div>
-        <h2 style="font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.5rem,2.5vw,2rem); margin-bottom:1.5rem; line-height:1.2;">
-          Estudiante de <em style="color:var(--green); font-style:normal;">Ingeniería de Sistemas</em> y Computación
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:1.5rem;line-height:1.2;">
+          Estudiante de <em style="color:var(--green);font-style:normal;">Ingeniería de Sistemas</em> y Computación
         </h2>
-
-        <p>Soy estudiante de <strong>Ingeniería de Sistemas y Computación</strong> en la
-          <strong>Universidad Peruana Los Andes</strong>, actualmente cursando el
-          <strong>V ciclo</strong> de mi formación académica.</p>
-
-        <p>Me caracterizo por mi responsabilidad, proactividad y compromiso con el aprendizaje
-          continuo, lo que me permite adaptarme rápidamente a nuevos retos y entornos tecnológicos.</p>
-
-        <p>Me encuentro enfocado en desarrollarme en el área de <strong>desarrollo de software</strong>,
-          fortaleciendo constantemente mis habilidades en programación, resolución de problemas y
-          trabajo en equipo. Mi objetivo es adquirir experiencia práctica que me permita diseñar e
-          implementar soluciones eficientes, innovadoras y de alto impacto.</p>
-
+        <p>Soy estudiante de <strong>Ingeniería de Sistemas y Computación</strong> en la <strong>Universidad Peruana Los Andes</strong>, actualmente cursando el <strong>V ciclo</strong> de mi formación académica.</p>
+        <p>Me caracterizo por mi responsabilidad, proactividad y compromiso con el aprendizaje continuo, lo que me permite adaptarme rápidamente a nuevos retos y entornos tecnológicos.</p>
+        <p>Me encuentro enfocado en desarrollarme en el área de <strong>desarrollo de software</strong>, fortaleciendo constantemente mis habilidades en programación, resolución de problemas y trabajo en equipo. Mi objetivo es adquirir experiencia práctica que me permita diseñar e implementar soluciones eficientes, innovadoras y de alto impacto.</p>
         <div class="about-contacts">
           <a href="mailto:diego.vilchez@upla.edu.pe" class="contact-item">
-            <div class="contact-icon">✉️</div>
-            diego.vilchez@upla.edu.pe
+            <div class="contact-icon">✉️</div>diego.vilchez@upla.edu.pe
           </a>
           <a href="https://github.com/diegovilchez" target="_blank" class="contact-item">
-            <div class="contact-icon">💻</div>
-            github.com/diegovilchez
+            <div class="contact-icon">💻</div>github.com/diegovilchez
           </a>
           <a href="https://linkedin.com/in/diegovilchez" target="_blank" class="contact-item">
-            <div class="contact-icon">🔗</div>
-            linkedin.com/in/diegovilchez
+            <div class="contact-icon">🔗</div>linkedin.com/in/diegovilchez
           </a>
         </div>
       </div>
-
       <div class="about-image-wrap">
-        <img
-          src="https://diegovilchezestrada-del.github.io/mi-pagina-web/imageperfil.jpg"
-          alt="Diego Michael Vilchez Estrada"
-          class="about-img"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-        <!-- Fallback si no carga la imagen -->
-        <div class="about-img-fallback">
-          <div class="about-avatar">V</div>
+        <img src="https://diegovilchezestrada-del.github.io/mi-pagina-web/imageperfil.jpg"
+             alt="Diego Michael Vilchez Estrada"
+             class="about-img"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;width:100%;aspect-ratio:3/4;border-radius:var(--radius);background:linear-gradient(135deg,#152019,#1e3326);align-items:center;justify-content:center;">
+          <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:2.5rem;color:var(--bg)">V</div>
         </div>
         <div class="about-badge">
           <div class="about-badge-label">Carrera</div>
           <div class="about-badge-val">Ing. Sistemas · V Ciclo</div>
         </div>
       </div>
-
     </div>
-  </section><!-- /sobre-mi -->
-
+  </section>
 
   <!-- FOOTER -->
   <footer>
     <div class="footer-brand">
-      <img
-        src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
-        class="footer-logo" alt="UPLA"
-        onerror="this.style.display='none'">
+      <img src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+           class="footer-logo" alt="UPLA"
+           onerror="this.style.display='none'">
       <span><strong>UPLA</strong> · Portafolio Base de Datos II · Vilchez Estrada Diego Michael</span>
     </div>
     <div>Ing. Sistemas y Computación · © 2026</div>
@@ -237,12 +594,9 @@
 </div><!-- /page-home -->
 
 
-<!-- ═══════════════════════════════════════════════════
-     PAGE: UNIDADES
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════ PAGE: UNIDADES ═══════════════════════════════ -->
 <div id="page-unidades" class="page">
-  <div class="units-page">
-
+  <div class="units-page" style="padding-top:70px;">
     <div class="units-page-header">
       <div class="section-label" style="justify-content:center;">Material del curso</div>
       <h1>Unidades</h1>
@@ -250,10 +604,10 @@
     </div>
 
     <div class="units-tabs">
-      <button class="units-tab active" onclick="switchTab(1)">Unidad 01</button>
-      <button class="units-tab"        onclick="switchTab(2)">Unidad 02</button>
-      <button class="units-tab"        onclick="switchTab(3)">Unidad 03</button>
-      <button class="units-tab"        onclick="switchTab(4)">Unidad 04</button>
+      <button class="units-tab active" onclick="switchTab(1)" id="tab-1">Unidad 01</button>
+      <button class="units-tab" onclick="switchTab(2)" id="tab-2">Unidad 02</button>
+      <button class="units-tab" onclick="switchTab(3)" id="tab-3">Unidad 03</button>
+      <button class="units-tab" onclick="switchTab(4)" id="tab-4">Unidad 04</button>
       <button class="units-tab units-tab-back" onclick="showPage('home')">← Salir</button>
     </div>
 
@@ -271,8 +625,9 @@
               <div class="resource-desc">Fundamentos, modelo relacional, SQL básico y DDL</div>
             </div>
           </div>
-          <a href="https://diegovilchezestrada-del.github.io/mi-pagina-web/unidades.html"
-             class="btn-download" target="_blank">⬇ Descargar</a>
+          <a href="https://diegovilchezestrada-del.github.io/mi-pagina-web/unidades.html" class="btn-download" target="_blank">
+            ⬇ Descargar
+          </a>
         </div>
         <div class="resource-card">
           <div class="resource-card-info">
@@ -369,42 +724,27 @@
 </div><!-- /page-unidades -->
 
 
-<!-- ═══════════════════════════════════════════════════
-     PAGE: LOGIN
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════ PAGE: LOGIN ═══════════════════════════════ -->
 <div id="page-login" class="page">
   <div class="login-page">
     <div class="login-box">
-
       <button class="btn-back" onclick="showPage('home')">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Volver
       </button>
 
       <div class="login-logo-wrap">
-        <img
-          src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
-          class="login-logo-img" alt="UPLA"
-          onerror="this.style.display='none'">
+        <img src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+             class="login-logo-img" alt="UPLA"
+             onerror="this.style.display='none'">
         <div class="login-univ">Universidad Peruana Los Andes</div>
         <div class="login-sub">Base de Datos II · 2026</div>
       </div>
 
       <div class="login-stats">
-        <div class="login-stat">
-          <div class="login-stat-n">4</div>
-          <div class="login-stat-l">Unidades</div>
-        </div>
-        <div class="login-stat">
-          <div class="login-stat-n">16</div>
-          <div class="login-stat-l">Semanas</div>
-        </div>
-        <div class="login-stat">
-          <div class="login-stat-n">2026</div>
-          <div class="login-stat-l">Ciclo</div>
-        </div>
+        <div class="login-stat"><div class="login-stat-n">4</div><div class="login-stat-l">Unidades</div></div>
+        <div class="login-stat"><div class="login-stat-n">16</div><div class="login-stat-l">Semanas</div></div>
+        <div class="login-stat"><div class="login-stat-n">2026</div><div class="login-stat-l">Ciclo</div></div>
       </div>
 
       <div class="login-tags">
@@ -424,7 +764,6 @@
         <label class="form-label">Contraseña</label>
         <input type="password" class="form-input" placeholder="••••••••" />
       </div>
-
       <div class="form-row">
         <label class="form-check">
           <input type="checkbox" />
@@ -438,28 +777,38 @@
       <div class="login-divider">o continúa con</div>
 
       <button class="btn-google">
-        <svg class="google-icon" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
+        <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Continuar con Google
       </button>
 
-      <p class="login-register">
-        ¿No tienes cuenta? <a onclick="showPage('home')">Regístrate aquí</a>
-      </p>
+      <p class="login-register">¿No tienes cuenta? <a onclick="showPage('home')">Regístrate aquí</a></p>
       <p class="login-ssl">🔒 Conexión cifrada SSL · Acceso protegido</p>
-
     </div>
   </div>
 </div><!-- /page-login -->
 
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+    // show/hide nav
+    document.getElementById('mainNav').style.display = name === 'login' ? 'none' : 'flex';
+  }
 
-<!-- ═══════════════════════════════════════════════════
-     SCRIPT
-═══════════════════════════════════════════════════ -->
-<script src="script.js"></script>
+  function showUnidad(n) {
+    showPage('unidades');
+    switchTab(n);
+  }
+
+  function switchTab(n) {
+    document.querySelectorAll('.units-tab:not(.units-tab-back)').forEach((t,i) => {
+      t.classList.toggle('active', i+1 === n);
+    });
+    document.querySelectorAll('.unit-content-panel').forEach((p,i) => {
+      p.classList.toggle('active', i+1 === n);
+    });
+  }
+</script>
 </body>
 </html>
