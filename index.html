@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portafolio Académico - Base de Datos II</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav id="mainNav">
+  <a class="nav-brand" onclick="showPage('home')">
+    <img src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+         class="nav-logo-img" alt="UPLA"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="nav-logo-fallback" style="display:none">V</div>
+    <div>
+      <div class="nav-brand-text">Universidad Peruana Los Andes</div>
+      <div class="nav-brand-sub">Portafolio · Base de Datos II</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')">Inicio</a></li>
+    <li><a onclick="showUnidad(1)">Unidad I</a></li>
+    <li><a onclick="showUnidad(2)">Unidad II</a></li>
+    <li><a onclick="showUnidad(3)">Unidad III</a></li>
+    <li><a onclick="showUnidad(4)">Unidad IV</a></li>
+    <li><a onclick="irSobreMi()">Sobre mí</a></li>
+  </ul>
+  <button class="btn-login" onclick="showPage('login')">Ingresar</button>
+</nav>
+
+
+<!-- ══════════════ PAGE: HOME ══════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="fadein">
+        <div class="hero-badge"><span></span>Ciclo Académico 2026 · UPLA</div>
+        <h1>Vera Madueño<br><em>Jordan</em></h1>
+        <p class="hero-sub">
+          Portafolio <strong>Base de Datos II</strong> — plataforma académica de la carrera de
+          <strong>Ingeniería de Sistemas y Computación</strong>
+        </p>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="showPage('unidades')">Explorar Unidades</button>
+          <button class="btn-secondary" onclick="showPage('login')">Ingresar al Portal</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">4</span><span class="stat-label">Unidades</span></div>
+          <div class="stat"><span class="stat-num">16</span><span class="stat-label">Semanas</span></div>
+          <div class="stat"><span class="stat-num">HYO</span><span class="stat-label">Huancayo · Perú</span></div>
+          <div class="stat"><span class="stat-num">2026</span><span class="stat-label">Año</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orbit">
+          <div class="orbit-inner"></div>
+          <div class="orbit-dot dot1">NoSQL</div>
+          <div class="orbit-dot dot2">SQL</div>
+          <div class="orbit-dot dot3" style="color:var(--gold)">PG</div>
+          <div class="orbit-dot dot4" style="color:var(--gold)">MDB</div>
+          <div class="center-card">
+            <div class="center-card-icon">🗄️</div>
+            <div class="center-card-title">Base de Datos II</div>
+            <div class="center-card-sub">SQL Server · PostgreSQL · MongoDB</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Unidades resumen -->
+  <div class="section">
+    <div class="section-label">Contenido del curso</div>
+    <h2>Unidades del Curso</h2>
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnidad(1)">
+        <div class="unit-num">I</div>
+        <span class="unit-tag">Semanas 1–4</span>
+        <h3>Introducción a Bases de Datos</h3>
+        <p>Fundamentos, modelo relacional, SQL básico y DDL.</p>
+        <span class="unit-link">Ver semanas <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="unit-card" onclick="showUnidad(2)">
+        <div class="unit-num">II</div>
+        <span class="unit-tag">Semanas 5–8</span>
+        <h3>Diseño y Normalización</h3>
+        <p>Modelado ER, formas normales e integridad referencial.</p>
+        <span class="unit-link">Ver semanas <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="unit-card" onclick="showUnidad(3)">
+        <div class="unit-num">III</div>
+        <span class="unit-tag">Semanas 9–12</span>
+        <h3>SQL Avanzado</h3>
+        <p>Procedimientos, vistas, triggers y optimización de consultas.</p>
+        <span class="unit-link">Ver semanas <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="unit-card" onclick="showUnidad(4)">
+        <div class="unit-num">IV</div>
+        <span class="unit-tag">Semanas 13–16</span>
+        <h3>Bases de Datos NoSQL</h3>
+        <p>MongoDB, Redis, comparativas y casos de uso reales.</p>
+        <span class="unit-link">Ver semanas <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sobre mí -->
+  <section id="sobre-mi" style="padding:0 0 6rem;">
+    <div class="about-wrap">
+      <div class="about-text">
+        <div class="section-label" style="margin-bottom:1rem;">Sobre mí</div>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:1.5rem;line-height:1.2;">
+          Estudiante de <em style="color:var(--green);font-style:normal;">Ingeniería de Sistemas</em> y Computación
+        </h2>
+        <p>Soy estudiante de <strong>Ingeniería de Sistemas y Computación</strong> en la <strong>Universidad Peruana Los Andes</strong>, actualmente cursando el <strong>V ciclo</strong> de mi formación académica.</p>
+        <p>Me caracterizo por mi responsabilidad, proactividad y compromiso con el aprendizaje continuo, lo que me permite adaptarme rápidamente a nuevos retos y entornos tecnológicos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">
+      <img src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+           class="footer-logo" alt="UPLA" onerror="this.style.display='none'">
+      <span><strong>UPLA</strong> · Portafolio Base de Datos II · Vera Madueño Jordan</span>
+    </div>
+    <div>Ing. Sistemas y Computación · © 2026</div>
+  </footer>
+
+</div><!-- /page-home -->
+
+
+<!-- ══════════════ PAGE: UNIDADES ══════════════ -->
+<div id="page-unidades" class="page">
+  <div class="units-page">
+    <div class="units-page-header">
+      <div class="section-label" style="justify-content:center;">Material del curso</div>
+      <h1>Unidades</h1>
+    </div>
+
+    <div class="units-tabs">
+      <button class="units-tab active" onclick="switchTab(1)">Unidad 01</button>
+      <button class="units-tab"        onclick="switchTab(2)">Unidad 02</button>
+      <button class="units-tab"        onclick="switchTab(3)">Unidad 03</button>
+      <button class="units-tab"        onclick="switchTab(4)">Unidad 04</button>
+      <button class="units-tab units-tab-back" onclick="showPage('home')">← Salir</button>
+    </div>
+
+    <div class="unit-content">
+
+      <!-- ════════════ UNIDAD 01 ════════════ -->
+      <div class="unit-content-panel active" id="panel-1">
+        <div class="unit-panel-header">
+          <h2>Unidad 01 - Introduccion a la Base de Datos</h2>
+        </div>
+        <div class="semanas-list">
+
+          <!-- Semana 1 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 1</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Un Archivo Disponible</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">📄</div>
+                    <div>
+                      <div class="recurso-name">Arquitecturas_BD</div>
+                    </div>
+                  </div>
+                  <a href="semana 1\Arquitecturas_BD.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 2 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 2</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Tres Archivos Disponibles</div>
+
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">📄</div>
+                    <div><div class="recurso-name">Analisis Tecnico</div></div>
+                  </div>
+                  <a href="semana 2\Analisis_Tecnico.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">📋</div>
+                    <div><div class="recurso-name">Diagrama</div></div>
+                  </div>
+                  <a href="semana 2\Diagrama.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">📋</div>
+                    <div><div class="recurso-name">Manual de Instalacion</div></div>
+                  </div>
+                  <a href="semana 2\Manual de Instalacion SQL.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 3 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 3</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Tres Archivos Disponibles</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">📄</div>
+                    <div><div class="recurso-name">Arquitecturas 1</div></div>
+                  </div>
+                  <a href="semana 3\Arquitecturadebasededatos.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">💾</div>
+                    <div><div class="recurso-name">Modelado y Normalizacion</div></div>
+                  </div>
+                  <a href="semana 3\MODELADO Y NORMALIZACION DE BASE DE DATOS.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">💾</div>
+                    <div><div class="recurso-name">Preguntas</div></div>
+                  </div>
+                  <a href="semana 3\Preguntas.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 4 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 4</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Dos Archivos Disponibles</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">📄</div>
+                    <div><div class="recurso-name">Arquiteturas 2</div></div>
+                  </div>
+                  <a href="semana 4\ARQUITECTURA DE BASE DE DATOS.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left">
+                    <div class="recurso-icon">💾</div>
+                    <div><div class="recurso-name">Modelo</div></div>
+                  </div>
+                  <a href="semana 4\MODELO.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /semanas-list -->
+      </div><!-- /panel-1 -->
+
+
+      <!-- ════════════ UNIDAD 02 ════════════ -->
+      <div class="unit-content-panel" id="panel-2">
+        <div class="unit-panel-header">
+          <h2>Unidad 02 — Diseño y Normalización</h2>
+        </div>
+        <div class="semanas-list">
+
+          <!-- Semana 5 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 5</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Dos Archivos Disponibles</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Introduccion Visual</div></div></div>
+                  <a href="semana 5\Introducción_Visual_a_SQL_.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">🗂️</div><div><div class="recurso-name">Relacion Normalizada</div></div></div>
+                  <a href="semana 5\relacion_normalizada.pdf" class="btn-download">⬇ VER TRABAJO</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 6 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 6</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Primera y Segunda Forma Normal</div>
+                  <div class="semana-subtitulo">1FN y 2FN</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Aplicación de la 1FN (eliminar grupos repetidos, asegurar atomicidad) y 2FN (eliminar dependencias parciales). Ejercicios prácticos de normalización.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 6</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📋</div><div><div class="recurso-name">Ejercicios 1FN y 2FN</div><div class="recurso-tipo">Práctica · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 7 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 7</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Tercera Forma Normal y BCNF</div>
+                  <div class="semana-subtitulo">3FN y Forma Normal de Boyce-Codd</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Eliminación de dependencias transitivas (3FN) y dependencias funcionales anómalas (BCNF). Comparativa entre las formas normales y cuándo aplicar cada una.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 7</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📋</div><div><div class="recurso-name">Ejercicios 3FN y BCNF</div><div class="recurso-tipo">Práctica · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 8 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 8</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Integridad Referencial y Restricciones</div>
+                  <div class="semana-subtitulo">FOREIGN KEY, CHECK, UNIQUE y DEFAULT</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Implementación de restricciones de integridad en SQL Server: claves foráneas con ON DELETE/UPDATE CASCADE, restricciones CHECK, UNIQUE y DEFAULT.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 8</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">💾</div><div><div class="recurso-name">Scripts SQL — Restricciones</div><div class="recurso-tipo">Script · SQL</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /panel-2 -->
+
+
+      <!-- ════════════ UNIDAD 03 ════════════ -->
+      <div class="unit-content-panel" id="panel-3">
+        <div class="unit-panel-header">
+          <h2>Unidad 03 — SQL Avanzado</h2>
+        </div>
+        <div class="semanas-list">
+
+          <!-- Semana 9 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 9</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Subconsultas y Funciones de Agregación</div>
+                  <div class="semana-subtitulo">Subqueries, GROUP BY avanzado y HAVING</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Subconsultas correlacionadas y no correlacionadas, funciones de agregación (SUM, COUNT, AVG, MAX, MIN), cláusulas GROUP BY y HAVING con ejemplos complejos.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 9</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">💾</div><div><div class="recurso-name">Scripts SQL — Subconsultas</div><div class="recurso-tipo">Script · SQL</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 10 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 10</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Vistas (Views)</div>
+                  <div class="semana-subtitulo">CREATE VIEW, vistas actualizables</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Creación y gestión de vistas en SQL Server: vistas simples, vistas complejas con JOIN, vistas actualizables, seguridad mediante vistas y WITH CHECK OPTION.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 10</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">💾</div><div><div class="recurso-name">Scripts SQL — Vistas</div><div class="recurso-tipo">Script · SQL</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 11 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 11</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Procedimientos Almacenados</div>
+                  <div class="semana-subtitulo">Stored Procedures con parámetros</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Diseño e implementación de stored procedures en SQL Server: parámetros de entrada/salida, control de flujo (IF, WHILE), manejo de errores con TRY-CATCH.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 11</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">💾</div><div><div class="recurso-name">Scripts SQL — Stored Procedures</div><div class="recurso-tipo">Script · SQL</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 12 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 12</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Triggers e Índices</div>
+                  <div class="semana-subtitulo">Automatización y optimización de consultas</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Triggers DML (AFTER INSERT/UPDATE/DELETE, INSTEAD OF), auditoría con triggers, índices clustered y non-clustered, plan de ejecución y optimización de consultas.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 12</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">💾</div><div><div class="recurso-name">Scripts SQL — Triggers e Índices</div><div class="recurso-tipo">Script · SQL</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /panel-3 -->
+
+
+      <!-- ════════════ UNIDAD 04 ════════════ -->
+      <div class="unit-content-panel" id="panel-4">
+        <div class="unit-panel-header">
+          <h2>Unidad 04 — Bases de Datos NoSQL</h2>
+        </div>
+        <div class="semanas-list">
+
+          <!-- Semana 13 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 13</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Introducción a NoSQL</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Paradigma NoSQL: características, tipos (Documento, Clave-Valor, Columnar, Grafo), teorema CAP, ventajas y limitaciones frente a las BD relacionales.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 13</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📊</div><div><div class="recurso-name">Comparativa SQL vs NoSQL</div><div class="recurso-tipo">Cuadro comparativo · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 14 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 14</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">MongoDB — Operaciones CRUD</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Instalación y configuración de MongoDB. Operaciones CRUD: insertOne/insertMany, find con filtros, updateOne/updateMany, deleteOne. Uso de MongoDB Compass.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 14</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">🍃</div><div><div class="recurso-name">Scripts MongoDB — CRUD</div><div class="recurso-tipo">Script · JS</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 15 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 15</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">MongoDB — Aggregation Pipeline</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Aggregation Framework de MongoDB: etapas $match, $group, $project, $sort, $limit, $lookup (equivalente a JOIN). Casos prácticos de análisis de datos.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Técnico — Semana 15</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">🍃</div><div><div class="recurso-name">Scripts Aggregation Pipeline</div><div class="recurso-tipo">Script · JS</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semana 16 -->
+          <div class="semana-block">
+            <div class="semana-header" onclick="toggleSemana(this)">
+              <div class="semana-header-left">
+                <span class="semana-badge">Semana 16</span>
+                <div class="semana-info">
+                  <div class="semana-titulo">Proyecto Final — Integración SQL y NoSQL</div>
+                </div>
+              </div>
+              <svg class="semana-chevron" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="semana-body">
+              <p class="semana-descripcion">Proyecto integrador: diseño e implementación de una solución usando SQL Server y MongoDB. Análisis de cuándo usar cada tecnología, sustentación y entrega del informe final.</p>
+              <div class="recursos-list">
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">📄</div><div><div class="recurso-name">Informe Final del Curso</div><div class="recurso-tipo">Informe · PDF</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+                <div class="recurso-item">
+                  <div class="recurso-left"><div class="recurso-icon">🗂️</div><div><div class="recurso-name">Proyecto Final — Código Fuente</div><div class="recurso-tipo">Proyecto · ZIP</div></div></div>
+                  <a href="#" class="btn-download">⬇ Descargar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /panel-4 -->
+
+    </div><!-- /unit-content -->
+  </div>
+</div><!-- /page-unidades -->
+
+
+<!-- ══════════════ PAGE: LOGIN ══════════════ -->
+<div id="page-login" class="page">
+  <div class="login-page">
+    <div class="login-box">
+
+      <button class="btn-back" onclick="showPage('home')">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Volver
+      </button>
+
+      <div class="login-logo-wrap">
+        <img src="https://diegovilchezestrada-del.github.io/mi-pagina-web/LogoUpla.png"
+             class="login-logo-img" alt="UPLA" onerror="this.style.display='none'">
+        <div class="login-univ">Universidad Peruana Los Andes</div>
+        <div class="login-sub">Base de Datos II · 2026</div>
+      </div>
+
+      <div class="login-stats">
+        <div class="login-stat"><div class="login-stat-n">4</div><div class="login-stat-l">Unidades</div></div>
+        <div class="login-stat"><div class="login-stat-n">16</div><div class="login-stat-l">Semanas</div></div>
+        <div class="login-stat"><div class="login-stat-n">2026</div><div class="login-stat-l">Ciclo</div></div>
+      </div>
+
+      <div class="login-tags">
+        <span class="login-tag">Huancayo · Perú</span>
+        <span class="login-tag">Ing. Sistemas</span>
+        <span class="login-tag">Acceso Seguro</span>
+      </div>
+
+      <div class="login-title">Acceso al Portal</div>
+      <p class="login-desc">Ingresa tus credenciales para acceder al portafolio académico.</p>
+
+      <div class="form-group">
+        <label class="form-label" for="loginUsuario">Usuario o Correo</label>
+        <input type="text" id="loginUsuario" class="form-input" placeholder="usuario@upla.edu.pe" autocomplete="username" />
+        <div class="form-error" id="errorUsuario"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="loginClave">Contraseña</label>
+        <input type="password" id="loginClave" class="form-input" placeholder="••••••••" autocomplete="current-password" />
+        <div class="form-error" id="errorClave"></div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-check">
+          <input type="checkbox" />
+          <label>Recordarme</label>
+        </label>
+      </div>
+
+      <button class="btn-submit" onclick="handleLogin()">Ingresar al Portal</button>
+
+      <p class="login-ssl">🔒 Conexión cifrada SSL · Acceso protegido</p>
+
+    </div>
+  </div>
+</div><!-- /page-login -->
+
+
+<script src="script.js"></script>
+</body>
+</html>
