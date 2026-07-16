@@ -17,6 +17,50 @@
   --danger:  #e74c3c;
   --radius:  14px;
 }
+.about-wrap {
+    display: flex;
+    align-items: center;         /* Alinea la foto al centro verticalmente con el texto */
+    justify-content: space-between; /* Empuja el texto a la izquierda y la foto a la derecha */
+    gap: 40px;                   /* Separación de seguridad entre ambos */
+    /* Conserva aquí tus estilos anteriores de .about-wrap (background, border-radius, padding, etc.) */
+}
+
+/* El bloque de texto */
+.about-text {
+    flex: 1;                     /* Hace que el texto use el espacio disponible */
+}
+
+/* El contenedor de la foto */
+.about-photo-wrapper {
+    flex-shrink: 0;              /* Evita que la foto se deforme o se achique */
+}
+
+/* Ajustes para tu foto redonda */
+.personal-photo {
+    width: 180px;                /* Subimos un poco el tamaño para rellenar el vacío */
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(212, 175, 55, 0.6);
+    box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.08), 0 0 40px rgba(212, 175, 55, 0.2);
+    display: block;
+}
+
+/* RESPONSIVO: Para que en celulares se vea bien y no se apriete */
+@media (max-width: 768px) {
+    .about-wrap {
+        flex-direction: column-reverse; /* Foto arriba, texto abajo en móviles */
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .personal-photo {
+        width: 140px;                /* Vuelve a su tamaño original en móvil */
+        height: 140px;
+        margin: 0 auto;              /* Centra la foto en pantallas chicas */
+    }
+}
+
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
