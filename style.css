@@ -471,3 +471,116 @@ body.tema-hacker::after {
   .login-box { padding: 2rem 1.5rem; }
   .semana-titulo { font-size: .88rem; }
 }
+
+/* ══════════════════════════════════════════
+   ROBOT IA · DBot (chat flotante)
+══════════════════════════════════════════ */
+.rb-fab {
+  position: fixed; bottom: 22px; left: 22px; z-index: 999;
+  width: 64px; height: 64px; padding: 9px; cursor: pointer;
+  color: var(--green); background: var(--surface);
+  border: 2px solid var(--green); border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 0 0 0 rgba(46,204,113,.5);
+  animation: rbFlotar 3s ease-in-out infinite, rbPulso 2.6s ease-out infinite;
+  transition: transform .2s;
+}
+.rb-fab:hover { transform: scale(1.08) rotate(-4deg); }
+.rb-fab.activo { animation: none; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+.rb-ojos { transform-origin: 32px 30px; animation: rbParpadeo 4s infinite; }
+.rb-antena { animation: rbAntena 1.4s ease-in-out infinite; }
+@keyframes rbFlotar   { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes rbPulso    { 0% { box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 0 0 0 rgba(46,204,113,.5); }
+                        70%,100% { box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 0 0 16px rgba(46,204,113,0); } }
+@keyframes rbParpadeo { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes rbAntena   { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+.rb-tip {
+  position: fixed; bottom: 42px; left: 100px; z-index: 999;
+  background: var(--card); color: var(--text); border: 1px solid var(--border);
+  border-radius: 12px; padding: .55rem .85rem; font-size: .82rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  opacity: 0; transform: translateX(-8px); pointer-events: none;
+  transition: opacity .3s, transform .3s;
+}
+.rb-tip.visible { opacity: 1; transform: none; }
+
+.rb-panel {
+  position: fixed; bottom: 100px; left: 22px; z-index: 999;
+  width: 360px; height: 480px; max-height: calc(100vh - 130px);
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.55);
+  opacity: 0; transform: translateY(14px) scale(.97); transform-origin: bottom left;
+  pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.rb-panel.abierto { opacity: 1; transform: none; pointer-events: auto; }
+
+.rb-header {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .8rem 1rem; background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.rb-avatar { width: 36px; height: 36px; color: var(--green); flex-shrink: 0; }
+.rb-titulo { display: flex; flex-direction: column; flex: 1; line-height: 1.25; }
+.rb-titulo strong { font-family: 'Syne', sans-serif; font-size: .95rem; color: var(--text); }
+.rb-titulo span { font-size: .7rem; color: var(--muted); }
+.rb-cerrar {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  border-radius: 7px; padding: .25rem .55rem; cursor: pointer; transition: all .2s;
+}
+.rb-cerrar:hover { color: var(--danger); border-color: var(--danger); }
+
+.rb-mensajes {
+  flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: .6rem;
+}
+.rb-msg {
+  max-width: 85%; padding: .6rem .85rem; border-radius: 14px;
+  font-size: .85rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+  animation: rbEntrar .2s ease-out;
+}
+@keyframes rbEntrar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.rb-bot  { align-self: flex-start; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+.rb-user { align-self: flex-end; background: var(--green2); color: #06140b; border-bottom-right-radius: 4px; }
+body.tema-hacker .rb-user { color: #00040a; }
+
+.rb-accion {
+  display: block; margin-top: .55rem; background: none; cursor: pointer;
+  border: 1px solid var(--green); color: var(--green); border-radius: 8px;
+  padding: .3rem .65rem; font-size: .75rem; font-weight: 700; transition: background .2s;
+}
+.rb-accion:hover { background: rgba(46,204,113,.15); }
+
+.rb-escribiendo { display: flex; gap: 4px; padding: .8rem .9rem; }
+.rb-escribiendo span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--muted);
+  animation: rbPuntos 1s infinite ease-in-out;
+}
+.rb-escribiendo span:nth-child(2) { animation-delay: .15s; }
+.rb-escribiendo span:nth-child(3) { animation-delay: .3s; }
+@keyframes rbPuntos { 0%,80%,100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+
+.rb-chips { display: flex; flex-wrap: wrap; gap: .4rem; padding: 0 1rem .7rem; }
+.rb-chips button {
+  background: var(--surface); color: var(--muted); border: 1px solid var(--border);
+  border-radius: 999px; padding: .3rem .7rem; font-size: .74rem; cursor: pointer; transition: all .2s;
+}
+.rb-chips button:hover { color: var(--green); border-color: var(--green); }
+
+.rb-form { display: flex; gap: .5rem; padding: .7rem; border-top: 1px solid var(--border); background: var(--surface); }
+.rb-input {
+  flex: 1; min-width: 0; background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 10px; padding: .6rem .8rem;
+  font-size: .85rem; font-family: inherit; outline: none; transition: border-color .2s;
+}
+.rb-input:focus { border-color: var(--green); }
+.rb-enviar {
+  background: var(--green); color: #06140b; border: none; border-radius: 10px;
+  width: 42px; cursor: pointer; font-size: 1rem; transition: transform .15s, background .2s;
+}
+.rb-enviar:hover { background: var(--green2); transform: scale(1.05); }
+
+@media (max-width: 480px) {
+  .rb-panel { left: 12px; right: 12px; width: auto; bottom: 92px; }
+  .rb-fab { left: 12px; bottom: 16px; }
+  .rb-tip { display: none; }
+}
+ 
