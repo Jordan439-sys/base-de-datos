@@ -544,3 +544,301 @@ document.addEventListener('click', function(e) {
     }
   }
 });
+
+/* ══════════════════════════════════════════
+   ROBOT IA · asistente flotante (DBot)
+   Haz clic en el robot para abrir el chat.
+
+   👉 Para que responda CUALQUIER pregunta con IA real,
+      pega abajo la URL de tu proxy (ver worker.js).
+      Si la dejas vacía, usa la base de conocimiento local.
+══════════════════════════════════════════ */
+var CHATBOT_API_URL = '';
+
+var chatHistorial = [];
+var chatOcupado   = false;
+
+function normalizarTexto(s) {
+  return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+var UNIDADES_INFO = {
+  1: { titulo: 'Introducción a Bases de Datos', semanas: '1–4',   desc: 'Fundamentos, modelo relacional, SQL básico y DDL.' },
+  2: { titulo: 'Diseño y Normalización',        semanas: '5–8',   desc: 'Modelado ER, formas normales e integridad referencial.' },
+  3: { titulo: 'SQL Avanzado',                  semanas: '9–12',  desc: 'Procedimientos, vistas, triggers y optimización de consultas.' },
+  4: { titulo: 'Bases de Datos NoSQL',          semanas: '13–16', desc: 'MongoDB, Redis, comparativas y casos de uso reales.' }
+};
+
+var BASE_CONOCIMIENTO = [
+  { k: ['hola', 'buenas', 'hey', 'buenos dias', 'buenas tardes', 'buenas noches'],
+    r: '¡Hola! 👋 Soy DBot, el asistente de este portafolio. Pregúntame por las unidades, las semanas o conceptos de Base de Datos.' },
+  { k: ['quien eres', 'que eres', 'como te llamas', 'tu nombre'],
+    r: 'Soy DBot 🤖, el robot de este portafolio de Base de Datos II. Puedo explicarte el contenido del curso y conceptos de SQL y NoSQL.' },
+  { k: ['jordan', 'vera', 'autor', 'sobre mi', 'quien hizo'],
+    r: 'Este portafolio es de Jordan Vera Madueño, estudiante del V ciclo de Ingeniería de Sistemas y Computación en la Universidad Peruana Los Andes (Huancayo, Perú). Se describe como responsable, proactivo y comprometido con el aprendizaje continuo.',
+    b: { t: 'Ver "Sobre mí"', f: function() { irSobreMi(); } } },
+  { k: ['upla', 'universidad', 'los andes', 'huancayo'],
+    r: 'La Universidad Peruana Los Andes (UPLA) está en Huancayo, Perú. Este portafolio corresponde al curso Base de Datos II, ciclo académico 2026.' },
+  { k: ['cuantas unidades', 'cuantas semanas', 'contenido del curso', 'temario', 'de que trata', 'que se ve', 'silabo'],
+    r: 'El curso tiene 4 unidades y 16 semanas:\n• Unidad I (sem. 1–4): Introducción a Bases de Datos\n• Unidad II (sem. 5–8): Diseño y Normalización\n• Unidad III (sem. 9–12): SQL Avanzado\n• Unidad IV (sem. 13–16): Bases de Datos NoSQL',
+    b: { t: 'Explorar unidades', f: function() { showPage('unidades'); } } },
+  { k: ['login', 'ingresar', 'iniciar sesion', 'contrasena', 'admin', 'subir archivo', 'modo admin'],
+    r: 'El botón "Ingresar" (arriba a la derecha) abre el acceso al portal. Con el modo administrador se pueden subir archivos a cada semana.' },
+  { k: ['modo hacker', 'cambiar modo', 'tema', 'modo oscuro'],
+    r: 'El botón "🔄 Cambiar modo" (abajo a la derecha) alterna entre el tema clásico y el modo hacker. Tu elección se guarda en el navegador.' },
+
+  { k: ['sql server', 'sqlserver', 't-sql', 'tsql', 'ssms'],
+    r: 'SQL Server es el motor relacional de Microsoft. Usa T-SQL como lenguaje y se administra con SSMS. En el curso se usa para DDL, procedimientos almacenados, vistas y triggers.' },
+  { k: ['postgres', 'postgresql', 'pgadmin'],
+    r: 'PostgreSQL es un motor relacional open source, muy robusto y compatible con el estándar SQL. Soporta tipos avanzados como JSON y arrays, y extensiones.' },
+  { k: ['mongodb', 'mongo', 'documento', 'aggregation', 'pipeline'],
+    r: 'MongoDB es una base de datos NoSQL orientada a documentos (JSON/BSON). El Aggregation Pipeline procesa datos por etapas: $match filtra, $group agrupa, $project elige campos, $sort ordena, $limit limita y $lookup equivale a un JOIN.' },
+  { k: ['nosql', 'no relacional', 'redis', 'clave valor'],
+    r: 'NoSQL agrupa bases no relacionales: documentos (MongoDB), clave-valor (Redis), columnas y grafos. Priorizan flexibilidad de esquema y escalabilidad horizontal. Se eligen cuando los datos cambian mucho o el volumen es enorme.' },
+  { k: ['sql o nosql', 'diferencia entre sql', 'sql vs nosql', 'cuando usar'],
+    r: 'SQL: esquema fijo, relaciones, transacciones ACID; ideal para datos estructurados (finanzas, inventarios). NoSQL: esquema flexible y escala horizontal; ideal para datos variables o de gran volumen (catálogos, logs, tiempo real). Muchas soluciones usan ambos.' },
+  { k: ['normalizacion', 'forma normal', '1fn', '2fn', '3fn', 'bcnf'],
+    r: 'Normalizar es organizar tablas para reducir redundancia.\n• 1FN: valores atómicos, sin grupos repetidos.\n• 2FN: 1FN + sin dependencias parciales de la clave.\n• 3FN: 2FN + sin dependencias transitivas.\nMenos duplicación, menos anomalías al insertar, actualizar o borrar.' },
+  { k: ['modelo er', 'entidad relacion', 'diagrama er', 'cardinalidad'],
+    r: 'El modelo Entidad-Relación representa entidades (tablas), atributos y relaciones con su cardinalidad (1:1, 1:N, N:M). Es el paso previo a crear el esquema físico.' },
+  { k: ['clave primaria', 'primary key', 'clave foranea', 'foreign key', 'integridad'],
+    r: 'La clave primaria (PK) identifica cada fila de forma única. La clave foránea (FK) apunta a la PK de otra tabla y garantiza la integridad referencial: no puedes referenciar algo que no existe.' },
+  { k: ['join', 'inner join', 'left join'],
+    r: 'JOIN combina filas de varias tablas:\n• INNER JOIN: solo coincidencias.\n• LEFT JOIN: todo lo de la izquierda + coincidencias.\n• RIGHT JOIN: lo contrario.\n• FULL JOIN: todo de ambas.\nEjemplo: SELECT c.nombre, p.total FROM clientes c INNER JOIN pedidos p ON p.id_cliente = c.id;' },
+  { k: ['select', 'consulta', 'where', 'group by', 'order by'],
+    r: 'Estructura básica de una consulta:\nSELECT columnas FROM tabla WHERE condición GROUP BY columna HAVING condición ORDER BY columna;\nEl orden lógico de ejecución es FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY.' },
+  { k: ['ddl', 'create table', 'alter table', 'dml', 'dcl'],
+    r: 'DDL define la estructura (CREATE, ALTER, DROP). DML manipula datos (INSERT, UPDATE, DELETE, SELECT). DCL controla permisos (GRANT, REVOKE).' },
+  { k: ['trigger', 'disparador'],
+    r: 'Un trigger es código que se ejecuta automáticamente ante INSERT, UPDATE o DELETE en una tabla. Sirve para auditoría, validaciones y mantener datos derivados.' },
+  { k: ['procedimiento', 'stored procedure', 'almacenado'],
+    r: 'Un procedimiento almacenado es un conjunto de instrucciones SQL guardado en el servidor, con parámetros, que se ejecuta con EXEC/CALL. Mejora rendimiento, reutilización y seguridad.' },
+  { k: ['vista', 'view'],
+    r: 'Una vista es una consulta guardada que se usa como si fuera una tabla. Simplifica consultas complejas y permite ocultar columnas sensibles.' },
+  { k: ['indice', 'index', 'optimizacion', 'rendimiento', 'plan de ejecucion'],
+    r: 'Un índice acelera las búsquedas evitando recorrer toda la tabla (como el índice de un libro), pero hace más lentas las escrituras. Para optimizar: indexa columnas de WHERE/JOIN, evita SELECT * y revisa el plan de ejecución.' },
+  { k: ['transaccion', 'acid', 'commit', 'rollback'],
+    r: 'Una transacción agrupa operaciones que se ejecutan todas o ninguna. ACID: Atomicidad, Consistencia, Aislamiento (Isolation) y Durabilidad. Se controla con BEGIN, COMMIT y ROLLBACK.' },
+  { k: ['backup', 'respaldo', 'monitoreo', 'seguridad'],
+    r: 'Un buen plan incluye respaldos periódicos (completo, diferencial, de log), pruebas de restauración, control de permisos por roles y monitoreo del rendimiento.' },
+  { k: ['base de datos', 'sgbd', 'dbms'],
+    r: 'Una base de datos es un conjunto organizado de datos relacionados. El SGBD (DBMS) es el software que la administra: SQL Server, PostgreSQL, MongoDB, etc.' },
+  { k: ['gracias', 'genial', 'perfecto'],
+    r: '¡De nada! 😄 Aquí estaré si tienes más preguntas.' },
+  { k: ['adios', 'chao', 'hasta luego', 'nos vemos'],
+    r: '¡Hasta luego! 👋' }
+];
+
+/* Responde con la base local. Unidades y semanas se leen de la propia página. */
+function responderLocal(pregunta) {
+  var q = normalizarTexto(pregunta);
+
+  var mS = q.match(/semana\s*(\d{1,2})/);
+  if (mS) {
+    var n = parseInt(mS[1], 10), hallado = null;
+    document.querySelectorAll('.semana-block').forEach(function(b) {
+      if (numeroDeSemana(b) === n) hallado = b;
+    });
+    if (hallado) {
+      var t = hallado.querySelector('.semana-titulo');
+      var d = hallado.querySelector('.semana-descripcion');
+      return {
+        r: 'Semana ' + n + (t ? ' — ' + t.textContent.trim() : '') + (d ? '\n' + d.textContent.replace(/\s+/g, ' ').trim() : ''),
+        b: { t: 'Abrir semana ' + n, f: function() {
+          showUnidad(Math.ceil(n / 4));
+          setTimeout(function() {
+            if (!hallado.classList.contains('open')) toggleSemana(hallado.querySelector('.semana-header'));
+            hallado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 150);
+        } }
+      };
+    }
+    return { r: 'El curso llega hasta la semana 16. Prueba con un número del 1 al 16.' };
+  }
+
+  var mU = q.match(/unidad\s*(iv|iii|ii|i|1|2|3|4)\b/);
+  if (mU) {
+    var mapa = { i: 1, ii: 2, iii: 3, iv: 4 };
+    var u = mapa[mU[1]] || parseInt(mU[1], 10);
+    var info = UNIDADES_INFO[u];
+    return { r: 'Unidad ' + u + ' — ' + info.titulo + ' (semanas ' + info.semanas + ').\n' + info.desc,
+             b: { t: 'Ir a la Unidad ' + u, f: function() { showUnidad(u); } } };
+  }
+
+  var mejor = null, mejorPuntaje = 0;
+  BASE_CONOCIMIENTO.forEach(function(e) {
+    var p = 0;
+    e.k.forEach(function(c) { if (q.indexOf(c) !== -1) p += c.length; });
+    if (p > mejorPuntaje) { mejorPuntaje = p; mejor = e; }
+  });
+  if (mejor) return { r: mejor.r, b: mejor.b };
+
+  return { r: 'Esa pregunta se sale de lo que sé sin conexión a la IA 🤔. Puedo ayudarte con las unidades y semanas del curso, SQL, normalización, joins, triggers, índices, MongoDB y NoSQL. ¿Probamos con alguno?' };
+}
+
+/* Usa la IA real si hay URL configurada; si falla, cae a la base local */
+function obtenerRespuesta(pregunta) {
+  if (!CHATBOT_API_URL) {
+    return Promise.resolve(responderLocal(pregunta));
+  }
+  return fetch(CHATBOT_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages: chatHistorial.slice(-10) })
+  })
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(d) {
+      if (!d || !d.reply) throw new Error('Respuesta vacía');
+      return { r: d.reply };
+    })
+    .catch(function() {
+      var loc = responderLocal(pregunta);
+      loc.r = '(Sin conexión con la IA, respondo desde mi base local)\n' + loc.r;
+      return loc;
+    });
+}
+
+/* ── Interfaz ── */
+var ROBOT_SVG =
+  '<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true">' +
+    '<line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>' +
+    '<circle class="rb-antena" cx="32" cy="6" r="4" fill="var(--gold)"/>' +
+    '<rect x="8" y="26" width="6" height="14" rx="3" fill="currentColor"/>' +
+    '<rect x="50" y="26" width="6" height="14" rx="3" fill="currentColor"/>' +
+    '<rect x="13" y="14" width="38" height="36" rx="12" fill="var(--card)" stroke="currentColor" stroke-width="3"/>' +
+    '<g class="rb-ojos"><circle cx="24" cy="30" r="4.5" fill="currentColor"/><circle cx="40" cy="30" r="4.5" fill="currentColor"/></g>' +
+    '<path d="M24 41 Q32 47 40 41" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+  '</svg>';
+
+function agregarMensaje(texto, quien, boton) {
+  var cont = document.querySelector('.rb-mensajes');
+  var m = document.createElement('div');
+  m.className = 'rb-msg rb-' + quien;
+  m.textContent = texto;
+  if (boton) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'rb-accion';
+    b.textContent = boton.t;
+    b.addEventListener('click', function() { boton.f(); });
+    m.appendChild(b);
+  }
+  cont.appendChild(m);
+  cont.scrollTop = cont.scrollHeight;
+  return m;
+}
+
+function enviarPregunta(texto) {
+  texto = (texto || '').trim();
+  if (!texto || chatOcupado) return;
+  chatOcupado = true;
+
+  var chips = document.querySelector('.rb-chips');
+  if (chips) chips.style.display = 'none';
+
+  agregarMensaje(texto, 'user');
+  chatHistorial.push({ role: 'user', content: texto });
+
+  var escribiendo = agregarMensaje('', 'bot');
+  escribiendo.classList.add('rb-escribiendo');
+  escribiendo.innerHTML = '<span></span><span></span><span></span>';
+
+  var inicio = Date.now();
+  obtenerRespuesta(texto).then(function(res) {
+    var espera = Math.max(0, 450 - (Date.now() - inicio));
+    setTimeout(function() {
+      escribiendo.remove();
+      agregarMensaje(res.r, 'bot', res.b);
+      chatHistorial.push({ role: 'assistant', content: res.r });
+      chatOcupado = false;
+      document.querySelector('.rb-input').focus();
+    }, espera);
+  });
+}
+
+function alternarChat(abrir) {
+  var panel = document.querySelector('.rb-panel');
+  var fab   = document.querySelector('.rb-fab');
+  var tip   = document.querySelector('.rb-tip');
+  if (!panel) return;
+  var visible = (typeof abrir === 'boolean') ? abrir : !panel.classList.contains('abierto');
+  panel.classList.toggle('abierto', visible);
+  fab.classList.toggle('activo', visible);
+  fab.setAttribute('aria-expanded', visible ? 'true' : 'false');
+  if (tip) tip.classList.remove('visible');
+  if (visible) setTimeout(function() { document.querySelector('.rb-input').focus(); }, 200);
+}
+
+function crearRobotChat() {
+  if (document.querySelector('.rb-fab')) return;
+
+  var tip = document.createElement('div');
+  tip.className = 'rb-tip';
+  tip.textContent = '¡Hola! Pregúntame lo que quieras 👋';
+
+  var fab = document.createElement('button');
+  fab.type = 'button';
+  fab.className = 'rb-fab';
+  fab.setAttribute('aria-label', 'Abrir asistente de IA');
+  fab.setAttribute('aria-expanded', 'false');
+  fab.innerHTML = ROBOT_SVG;
+  fab.addEventListener('click', function() { alternarChat(); });
+
+  var panel = document.createElement('div');
+  panel.className = 'rb-panel';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-label', 'Chat con DBot');
+  panel.innerHTML =
+    '<div class="rb-header">' +
+      '<div class="rb-avatar">' + ROBOT_SVG + '</div>' +
+      '<div class="rb-titulo"><strong>DBot</strong><span>Asistente · Base de Datos II</span></div>' +
+      '<button type="button" class="rb-cerrar" aria-label="Cerrar">✕</button>' +
+    '</div>' +
+    '<div class="rb-mensajes"></div>' +
+    '<div class="rb-chips">' +
+      '<button type="button">¿Qué se ve en el curso?</button>' +
+      '<button type="button">¿SQL o NoSQL?</button>' +
+      '<button type="button">Explícame la normalización</button>' +
+    '</div>' +
+    '<div class="rb-form">' +
+      '<input type="text" class="rb-input" placeholder="Escribe tu pregunta…" autocomplete="off" maxlength="500" />' +
+      '<button type="button" class="rb-enviar" aria-label="Enviar">➤</button>' +
+    '</div>';
+
+  document.body.appendChild(tip);
+  document.body.appendChild(panel);
+  document.body.appendChild(fab);
+
+  agregarMensaje('¡Hola! Soy DBot 🤖. Pregúntame lo que quieras sobre este portafolio y Base de Datos.', 'bot');
+
+  panel.querySelector('.rb-cerrar').addEventListener('click', function() { alternarChat(false); });
+  panel.querySelector('.rb-enviar').addEventListener('click', function() {
+    var inp = panel.querySelector('.rb-input');
+    var t = inp.value; inp.value = '';
+    enviarPregunta(t);
+  });
+  panel.querySelector('.rb-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      var t = e.target.value; e.target.value = '';
+      enviarPregunta(t);
+    }
+  });
+  panel.querySelectorAll('.rb-chips button').forEach(function(c) {
+    c.addEventListener('click', function() { enviarPregunta(c.textContent); });
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && panel.classList.contains('abierto')) alternarChat(false);
+  });
+
+  // Globito de bienvenida, una sola vez por sesión
+  try {
+    if (!sessionStorage.getItem('pf_robot_tip')) {
+      sessionStorage.setItem('pf_robot_tip', '1');
+      setTimeout(function() { tip.classList.add('visible'); }, 1500);
+      setTimeout(function() { tip.classList.remove('visible'); }, 8000);
+    }
+  } catch (err) {}
+}
+
+document.addEventListener('DOMContentLoaded', crearRobotChat);
+ 
